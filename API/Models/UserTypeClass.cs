@@ -5,6 +5,7 @@ namespace API.Models
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum UserTypeClass
     {
+        SuperAdminType = 0,
         AdminType = 1,
         OperatorType = 2,
         OwnerType = 3

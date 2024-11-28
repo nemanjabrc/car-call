@@ -28,7 +28,7 @@ namespace API.Services.OwnerService
                         PhoneNumber = "980767555"
                     },
                     CreatedBy = UserTypeClass.OwnerType,
-                    CreationDate = DateOnly.FromDateTime(DateTime.Now),
+                    CreationDate = DateTime.Now,
                     Role = UserTypeClass.OwnerType,
                     Username = "nnemanja",
                 },
@@ -64,23 +64,23 @@ namespace API.Services.OwnerService
 
         public async Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwners()
         {
-            var serviceResponse = new ServiceResponse<List<GetOwnerDto>>();
+            var response = new ServiceResponse<List<GetOwnerDto>>();
 
             try
             {
-                serviceResponse.Data = owners.Select(o => _mapper.Map<GetOwnerDto>(o)).ToList();
-                serviceResponse.Success = true;
+                response.Data = owners.Select(o => _mapper.Map<GetOwnerDto>(o)).ToList();
+                response.Success = true;
             }
             catch (Exception e)
             {
-                serviceResponse.Success = false;
-                serviceResponse.Message = e.Message;
+                response.Success = false;
+                response.Message = e.Message;
             }
 
-            return serviceResponse;
+            return response;
         }
 
-        public Task<ServiceResponse<GetOwnerDto>> GetOwnerById()
+        public Task<ServiceResponse<GetOwnerDto>> GetOwnerById(int id)
         {
             throw new NotImplementedException();
         }

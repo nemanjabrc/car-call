@@ -4,6 +4,7 @@ global using API.DTOs.Owner;
 global using API.Services.OwnerService;
 global using Microsoft.EntityFrameworkCore;
 global using API.Data;
+global using API.Services.CompanyService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IOwnerService, OwnerService>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 var app = builder.Build();
 

@@ -9,7 +9,7 @@ namespace API.Services.OwnerService
     {
         Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwners();
         Task<ServiceResponse<List<GetOwnerDto>>> GetOwnersFromCompany();
-        Task<ServiceResponse<GetOwnerDto>> GetOwnerById();
+        Task<ServiceResponse<GetOwnerDto>> GetOwnerById(int id);
         Task<ServiceResponse<GetOwnerDto>> UpdateOwner(UpdateOwnerDto updatedOwner);
         Task<ServiceResponse<List<GetOwnerDto>>> DeleteOwner(int id);
     }

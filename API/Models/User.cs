@@ -15,8 +15,8 @@ namespace API.Models
         public byte[] PasswordHash { get; set; } = new byte[0];
         public byte[] PasswordSalt { get; set; } = new byte[0];
         public UserTypeClass Role { get; set; } = UserTypeClass.OwnerType;
-        public UserTypeClass CreatedBy { get; set; }
-        public DateOnly CreationDate { get; set; }
+        public UserTypeClass? CreatedBy { get; set; }
+        public DateTime CreationDate { get; set; }
         public Company? Company { get; set; }
     }
 }
