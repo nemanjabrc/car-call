@@ -12,6 +12,6 @@ namespace API.DTOs.Owner
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public List<NotificationServiceType>? NotificationService { get; set; }
-        public User? User { get; set; }
+        public Models.User? User { get; set; }
     }
 }

@@ -18,10 +18,5 @@ namespace API.Controllers
             _ownerService = ownerService;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<ActionResult<ServiceResponse<List<GetOwnerDto>>>> GetAll()
-        {
-            return Ok(await _ownerService.GetAllOwners());
-        }
     }
 }
