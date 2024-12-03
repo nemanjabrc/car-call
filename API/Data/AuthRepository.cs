@@ -5,8 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using API.DTOs.Admin;
+using API.Helpers.EmailHelper;
+using API.Helpers.PasswordHelper;
 using API.Migrations;
+using API.Services.EmailService;
 using API.Services.UserContextService;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Data
@@ -16,10 +20,12 @@ namespace API.Data
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
         private readonly IUserHttpContextService _userHttpContextService;
+        private readonly IEmailService _emailService;
 
-        public AuthRepository(DataContext context, IConfiguration configuration, IUserHttpContextService userHttpContextService)
+        public AuthRepository(DataContext context, IConfiguration configuration, IUserHttpContextService userHttpContextService, IEmailService emailService)
         {
             _userHttpContextService = userHttpContextService;
+            _emailService = emailService;
             _configuration = configuration;
             _context = context;
 
@@ -176,14 +182,86 @@ namespace API.Data
 
             response.Data = user.Id;
             response.Success = true;
-            response.Message = "Uspješno se registrovali novi nalog za operatora.";
+            response.Message = "Uspješno ste registrovali novi nalog za operatora.";
 
             return response;
         }
 
-        public Task<ServiceResponse<int>> RegisterOwner(Owner owner, string username, string password)
+        public async Task<ServiceResponse<int>> RegisterOwner(Owner owner)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<int>();
+
+            if (_userHttpContextService.GetUserRole().Equals(UserTypeClass.OwnerType.ToString()))
+            {
+                response.Success = false;
+                response.Message = "Neovlašten pristup! Samo operateri i administratori mogu kreirati naloge za druge vlasnike.";
+                return response;
+            }
+
+            User user = new User();
+
+            try
+            {
+                var company = await _context.Companies.FirstAsync(c => c.Id == _userHttpContextService.GetUserCompanyId());
+                user.Company = company;
+            }
+            catch (Exception e)
+            {
+                response.Success = false;
+                response.Message = e.Message;
+                return response;
+            }
+
+            string username = await GenerateOwnerUsername(owner.Name, owner.Surname);
+            string password = UserPasswordGenerator.GenerateRandomPassword();
+            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            string role = _userHttpContextService.GetUserRole();
+            switch (role)
+            {
+                case "OperatorType":
+                    user.CreatedBy = UserTypeClass.OperatorType;
+                    break;
+                case "AdminType":
+                    user.CreatedBy = UserTypeClass.AdminType;
+                    break;
+            }
+
+            user.Name = owner.Name;
+            user.Surname = owner.Surname;
+            user.Username = username;
+            user.Email = owner.Email;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            user.IsPasswordTemporary = true;
+            user.Role = UserTypeClass.OwnerType;
+            user.CreationDate = DateTime.Now;
+
+            var placeholders = new Dictionary<string, string>
+            {
+                {"Name", user.Name},
+                {"Surname", user.Surname},
+                {"Company", user.Company.Name},
+                {"Username", user.Username},
+                {"Password", password},
+            };
+
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplate", "RegisteredOwnerEmailTemplate.html");
+            string emailBody = EmailTemplateHelper.GetEmailBody(templatePath, placeholders);
+            await _emailService.SendEmailAsync(user.Email, "Dobro došli u Car Call!", emailBody);
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            owner.User = user;
+            _context.Owners.Add(owner);
+            await _context.SaveChangesAsync();
+
+            response.Data = user.Id;
+            response.Success = true;
+            response.Message = "Uspješno ste registrovali novog vlasnika.";
+
+            return response;
         }
 
         public async Task<bool> UserExists(string username)
@@ -207,6 +285,21 @@ namespace API.Data
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
+        }
+
+        private async Task<string> GenerateOwnerUsername(string name, string surname)
+        {
+            string baseUsername = $"{name.ToLower()}.{surname.ToLower()}";
+            string username = baseUsername;
+            int counter = 1;
+
+            while (await UserExists(username))
+            {
+                username = $"{baseUsername}{counter}";
+                counter++;
+            }
+
+            return username;
         }
 
         private string CreateToken(User user)

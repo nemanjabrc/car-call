@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Filters;
 using Microsoft.OpenApi.Models;
+using API.Services.EmailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,8 @@ builder.Services.AddScoped<IOwnerService, OwnerService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IUserHttpContextService, UserHttpContextService>();
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+builder.Services.AddSingleton<IEmailService, EmailService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

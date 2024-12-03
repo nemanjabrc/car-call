@@ -92,6 +92,32 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
+        [HttpPost("RegisterOwner")]
+        public async Task<ActionResult<ServiceResponse<int>>> RegisterOwner(UserOwnerRegisterDto request)
+        {
+            var response = await _authRepository.RegisterOwner(
+                new Owner
+                {
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber,
+                    NotificationService = request.NotificationService,
+                }
+            );
+
+            if (!response.Success)
+            {
+                if (response.Message.Contains("Neovlašten pristup!"))
+                {
+                    return Forbid();
+                }
+                return BadRequest(response);
+            }
+            return Ok(response);
+        }
+
 
         [HttpPost("Login")]
         public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
