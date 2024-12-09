@@ -17,6 +17,9 @@ namespace API.Data
         public DbSet<User> Users => Set<User>();
         public DbSet<Owner> Owners => Set<Owner>();
         public DbSet<Company> Companies => Set<Company>();
+        public DbSet<Vehicle> Vehicles => Set<Vehicle>();
+        public DbSet<RegistrationNotification> RegistrationNotifications => Set<RegistrationNotification>();
+        public DbSet<MaintenanceNotification> MaintenanceNotifications => Set<MaintenanceNotification>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

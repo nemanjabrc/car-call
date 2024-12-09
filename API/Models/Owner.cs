@@ -14,5 +14,6 @@ namespace API.Models
         public string PhoneNumber { get; set; } = string.Empty;
         public List<NotificationServiceType>? NotificationService { get; set; }
         public User? User { get; set; }
+        public List<Vehicle>? Vehicles { get; set; }
     }
 }

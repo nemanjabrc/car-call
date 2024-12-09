@@ -13,18 +13,12 @@ namespace API.Services.OwnerService
         {
             _mapper = mapper;
         }
-
         public Task<ServiceResponse<List<GetOwnerDto>>> DeleteOwner(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwners()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ServiceResponse<GetOwnerDto>> GetOwnerById(int id)
+        public Task<ServiceResponse<GetOwnerDto>> GetOwner(int id)
         {
             throw new NotImplementedException();
         }

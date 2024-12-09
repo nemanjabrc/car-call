@@ -21,7 +21,6 @@ namespace API.Services.UserContextService
             return companyId != null ? int.Parse(companyId) : throw new Exception("Korisnik ne pripada nijednoj kompaniji");
         }
 
-
         public int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
         public string GetUsername() => _httpContextAccessor.HttpContext!.User.FindFirstValue(ClaimTypes.Name)!;

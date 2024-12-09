@@ -20,6 +20,7 @@ namespace API.Services.CompanyService
         {
             var response = new ServiceResponse<List<GetCompanyDto>>();
             var company = _mapper.Map<Company>(newCompany);
+            company.RegistrationNotification = new RegistrationNotification(company);
 
             _context.Companies.Add(company);
             await _context.SaveChangesAsync();
@@ -90,6 +91,7 @@ namespace API.Services.CompanyService
                 company.City = updatedCompany.City;
                 company.PhoneNumber = updatedCompany.PhoneNumber;
                 company.Email = updatedCompany.Email;
+
 
                 await _context.SaveChangesAsync();
                 response.Data = _mapper.Map<GetCompanyDto>(company);
