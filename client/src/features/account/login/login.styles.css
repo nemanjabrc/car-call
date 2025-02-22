@@ -1,0 +1,25 @@
+.submit {
+    display: block;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+}
+  
+.signup-link {
+    color: #339966;
+    font-size: 0.95rem;
+    line-height: 1.25rem;
+    text-align: center;
+}
+  
+.signup-link a {
+    text-decoration: underline;
+}
