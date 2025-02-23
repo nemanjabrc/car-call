@@ -34,7 +34,9 @@ const Account = {
     getCurrentOperatorProfile: () => requests.get('account/getCurrentOperatorProfile'),
     getAllOperatorsFromCompany: (companyId: number) => requests.get(`account/getAllOperatorsFromCompany/${companyId}`),
     getOperatorProfile: (operatorId: string) => requests.get(`account/getOperatorProfile/${operatorId}`),
-    deleteOperator: (operatorId: string) => requests.delete(`account/deleteOperator/${operatorId}`)
+    deleteOperator: (operatorId: string) => requests.delete(`account/deleteOperator/${operatorId}`),
+    getAllOwnersFromCompany: (companyId: number) => requests.get(`account/getAllOwnersFromCompany/${companyId}`),
+    getOwnerFromCompany: (ownerId: number) => requests.get(`account/getOwnerFromCompany/${ownerId}`),
 }
 
 const Company = {
@@ -55,6 +57,7 @@ const Vehicle = {
     addVehicle: (vehicle: any) => requests.post('vehicle/addVehicle', vehicle),
     renewVehicleRegistration: (vehicleId: number) => requests.put(`vehicle/renewRegistration/${vehicleId}`),
     deleteVehicle: (vehicleId: number) => requests.delete(`Vehicle/deleteVehicle/${vehicleId}`),
+    getAllVehiclesFromCompany: (companyId: number) => requests.get(`vehicle/getAllVehiclesFromCompany/${companyId}`),
 }
 
 const Notification = {

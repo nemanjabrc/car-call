@@ -5,6 +5,7 @@ import { useAppDispatch } from "../../app/store/configureStore";
 import { showSnackbar } from "../snackbar/snackbarSlice";
 import { LoadingButton } from "@mui/lab";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import { setOperator } from "./operatorSlice";
 
 const textFieldSx = {
     '& .MuiOutlinedInput-root': {
@@ -41,6 +42,7 @@ const RegisterOperatorForm = () => {
     const submitForm = async (data: any) => {
         try {
             await agent.Account.registerOperator(data);
+            dispatch(setOperator());
             reset();
             dispatch(showSnackbar("Uspješno ste dodali novog operatera."));
         } catch (error: any) {

@@ -7,6 +7,7 @@ import { vehicleSlice } from "../../features/vehicles/vehiclesSlice";
 import { notificationSlice } from "../../features/notification/notificationSlice";
 import { snackbarSlice } from "../../features/snackbar/snackbarSlice";
 import { operatorSlice } from "../../features/operator/operatorSlice";
+import { ownerSlice } from "../../features/owner/ownerSlice";
 
 export const store = configureStore({
     reducer: {
@@ -17,6 +18,7 @@ export const store = configureStore({
         notification: notificationSlice.reducer,
         snackbar: snackbarSlice.reducer,
         operator: operatorSlice.reducer,
+        owner: ownerSlice.reducer,
     }
 })
 

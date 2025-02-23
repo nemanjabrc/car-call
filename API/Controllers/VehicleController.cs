@@ -61,6 +61,19 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [HttpGet("getOwnersVehicles/{ownerId}")]
+        public async Task<ActionResult<List<GetVehicleDto>>> GetOwnersVehicles([FromRoute] int ownerId)
+        {
+            var response = await _vehicleService.GetOwnersVehicles(ownerId);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response.Data);
+        }
+
         [Authorize(Roles = "Owner")]
         [HttpPost("addVehicle")]
         public async Task<ActionResult<GetVehicleDto>> AddVehicle(AddVehicleDto newVehicle)

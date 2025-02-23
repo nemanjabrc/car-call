@@ -36,6 +36,18 @@ export const fetchVehicleAsync = createAsyncThunk<Vehicle, number>(
     }
 )
 
+export const fetchVehiclesFromCompanyAsync = createAsyncThunk<Vehicle[], number>(
+    'vehicle/fetchVehiclesFromCompanyAsync',
+    async(companyId, thunkAPI) => {
+        try {
+            const response = await agent.Vehicle.getAllVehiclesFromCompany(companyId);
+            return response;
+        } catch (error: any) {
+            return thunkAPI.rejectWithValue({error: error.data});
+        }
+    }
+)
+
 export const vehicleSlice = createSlice({
     name:'vehicle',
     initialState: vehiclesAdapter.getInitialState<VehicleState>({
@@ -73,6 +85,18 @@ export const vehicleSlice = createSlice({
             state.vehicleLoaded = true;
         });
         builder.addCase(fetchVehicleAsync.rejected, (state) => {
+            state.status = 'idle';
+        });
+
+        builder.addCase(fetchVehiclesFromCompanyAsync.pending, (state) => {
+            state.status = 'pendingFetchVehicles';
+        });
+        builder.addCase(fetchVehiclesFromCompanyAsync.fulfilled, (state, action) => {
+            vehiclesAdapter.setAll(state, action.payload);
+            state.status = 'idle';
+            state.vehiclesLoaded = true;
+        });
+        builder.addCase(fetchVehiclesFromCompanyAsync.rejected, (state) => {
             state.status = 'idle';
         });
     }

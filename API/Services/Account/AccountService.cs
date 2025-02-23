@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs.Owner;
 using API.DTOs.User;
+using API.DTOs.Vehicle;
 using API.Helpers.Email;
 using API.Helpers.Password;
 using API.Models;
@@ -455,7 +456,12 @@ namespace API.Services.Account
                         Id = o.Id,
                         Name = o.Name,
                         Surname = o.Surname,
-                        UserName = o.User.UserName
+                        UserName = o.User.UserName,
+                        Email = o.Email,
+                        CompanyName = o.Company.Name,
+                        PhoneNumber = o.PhoneNumber,
+                        DateOfCreation = o.User.CreationDate,
+                        NumberOfVehicles = o.Vehicles.Count
                     }).ToListAsync();
 
                 response.Success = true;
@@ -466,6 +472,39 @@ namespace API.Services.Account
                 response.Success = false;
                 response.Message = ex.Message;
             }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<GetOwnerDto>> GetOwnerFromCompany(int ownerId)
+        {
+            var response = new ServiceResponse<GetOwnerDto>();
+
+            var getOwner = await _context.Owners
+                .Where(o => o.Id == ownerId)
+                .Select(o => new GetOwnerDto
+                {
+                    Id = o.Id,
+                    Name = o.Name,
+                    Surname = o.Surname,
+                    UserName = o.User.UserName,
+                    Email = o.Email,
+                    CompanyName = o.Company.Name,
+                    PhoneNumber = o.PhoneNumber,
+                    DateOfCreation = o.User.CreationDate,
+                    NumberOfVehicles = o.Vehicles.Count
+                })
+                .FirstOrDefaultAsync();
+
+            if (getOwner is null)
+            {
+                response.Success = false;
+                response.Message = $"Nije pronađen vlasnik sa Id: {ownerId} u bazi.";
+                return response;
+            }
+
+            response.Success = true;
+            response.Data = getOwner;
 
             return response;
         }

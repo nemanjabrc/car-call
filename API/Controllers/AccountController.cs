@@ -232,6 +232,19 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [HttpGet("getOwnerFromCompany/{ownerId}")]
+        public async Task<ActionResult<GetOwnerDto>> GetOwnerFromCompany([FromRoute] int ownerId)
+        {
+            var response = await _accountService.GetOwnerFromCompany(ownerId);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response.Data);
+        }
+
         [Authorize]
         [HttpGet("currentUser")]
         public async Task<ActionResult<GetUserDto>> GetCurrentUser()

@@ -151,9 +151,33 @@ namespace API.Services.Vehicle
             return response;
         }
 
-        public Task<ServiceResponse<List<GetVehicleDto>>> GetOwnersVehicles()
+        public async Task<ServiceResponse<List<GetVehicleDto>>> GetOwnersVehicles(int ownerId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<List<GetVehicleDto>>
+            {
+                Data = new List<GetVehicleDto>()
+            };
+
+            var owner = await _context.Owners.FirstOrDefaultAsync(o => o.Id == ownerId);
+            if (owner is null)
+            {
+                response.Success = false;
+                response.Message = $"Nije pronadjen vlasnik sa id: {ownerId} u bazi.";
+                return response;
+            }
+
+            await foreach (var vehicle in _context.Vehicles
+                .Include(v => v.MaintenanceNotifications)
+                .Where(v => v.Owner.Id == owner.Id).AsAsyncEnumerable())
+            {
+                int numberOfNotifications = vehicle.MaintenanceNotifications.Count + 1;
+                var vehicleDto = _mapper.Map<GetVehicleDto>(vehicle);
+                vehicleDto.NumberOfNotifications = numberOfNotifications;
+                response.Data.Add(vehicleDto);
+            }
+
+            response.Success = true;
+            return response;
         }
 
         public async Task<ServiceResponse<GetVehicleDto>> GetVehicle(int vehicleId)

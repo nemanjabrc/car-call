@@ -21,6 +21,7 @@ namespace API.Services.Account
         Task<ServiceResponse<GetAdminProfileDto>> GetCurrentAdminProfile();
         Task<ServiceResponse<GetSuperadminProfileDto>> GetSuperadminProfile();
         Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwnersFromCompany(int companyId);
+        Task<ServiceResponse<GetOwnerDto>> GetOwnerFromCompany(int ownerId);
         Task<ServiceResponse<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany(int companyId);
         Task<ServiceResponse<GetOperatorProfileDto>> GetOperatorProfile(string operatorId);
         Task<ServiceResponse<IdentityResult>> DeleteOperator(string operatorId);

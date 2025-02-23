@@ -17,6 +17,6 @@ namespace API.Services.Vehicle
         Task<ServiceResponse<GetVehicleDto>> UpdateVehicle(UpdateVehicleDto updatedVehicle);
         Task<ServiceResponse<int>> DeleteVehicle(int vehicleId);
         Task<ServiceResponse<List<GetVehicleDto>>> GetAllVehiclesFromCompany(int companyId);
-        Task<ServiceResponse<List<GetVehicleDto>>> GetOwnersVehicles();
+        Task<ServiceResponse<List<GetVehicleDto>>> GetOwnersVehicles(int ownerId);
     }
 }
