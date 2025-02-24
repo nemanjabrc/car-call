@@ -1,20 +1,18 @@
-import { Avatar, AvatarGroup, Box, Grid, IconButton, Tooltip, Typography } from "@mui/material";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { UserProfile } from "../../app/models/userProfile";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
+import { fetchOwnerAsync, ownerSelectors } from "./ownerSlice";
+import { useEffect } from "react";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import dayjs from "dayjs";
-import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
+import { Box, Grid, Avatar, Typography, AvatarGroup, Tooltip, IconButton } from "@mui/material";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'; 
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
-
-interface Props {
-  profileData: UserProfile | null;
-  userRole: string | undefined;
-}
 
 const getServiceName = (service: string | undefined) => {
     switch (service) {
@@ -59,27 +57,26 @@ const getNumberOfVehiclesInfo = (numberOfVehicles: number) => {
     }
 }
 
-const getRoleName = (userRole: string | undefined) => {
-    switch (userRole) {
-        case "Owner":
-            return "vlasnik";
-        case "Operator":
-            return "operater";
-        case "Admin":
-            return "admin";
-        case "SuperAdmin":
-                return "superadmin";
-        default:
-            break;
-    }
-}
+const OwnerProfilePreview = () => {
 
-const UserProfilePreview = ({profileData, userRole}: Props) => {
+    const dispatch = useAppDispatch();
+    const {id} = useParams<{id: string}>();
+    const owner = useAppSelector(state => ownerSelectors.selectById(state, parseInt(id!)));
+    const {ownerLoaded} = useAppSelector(state => state.owner);
 
-    const creationDate = dayjs(profileData?.creationDate);
+    useEffect(() => {
+        if(!owner && id || ownerLoaded == false) {
+            dispatch(fetchOwnerAsync(parseInt(id!)));
+        }
+    }, [id, owner, ownerLoaded, dispatch]);
 
-    return(
-        <Box display='flex' justifyContent='center' alignItems='center' ml={5} mr={3}>
+    if(!owner)
+        return <LoadingComponent message="Učitavanje profila vlasnika..." />
+
+    const creationDate = dayjs(owner.creationDate);
+
+    return (
+        <Box display='flex' justifyContent='center' alignItems='center' sx={{p: 4}}>
             <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
@@ -87,6 +84,9 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                             <Avatar
                                 sx={{ width: 150, height: 150, bgcolor: '#99ddb3' }}
                             >
+                                <Typography variant="h2" sx={{color: '#fff'}}>
+                                    {owner.name[0].toUpperCase()}{owner.surname[0].toUpperCase()}
+                                </Typography>
                                 <Typography 
                                     sx={{
                                         position: 'absolute',
@@ -98,29 +98,29 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                                         color: '#fff',
                                     }}
                                 >
-                                    {getRoleName(userRole)}
+                                    operater
                                 </Typography>
-                                <PersonOutlineOutlinedIcon sx={{ fontSize: '90px'}}/>
                             </Avatar>
                             <Box display='flex' flexDirection='column' justifyContent='center' gap={1.5}>
                                 <Box>
                                     <Typography variant="h3" fontWeight='bold' color='#339966'>
-                                        @{profileData?.username}
+                                        @{owner.username}
                                     </Typography>
                                 </Box>
                                 <Box display='flex' justifyContent='start' alignItems='center' gap={1.5}>
                                     <Typography variant="h4" color="gray">
-                                        {profileData?.name}
+                                        {owner.name}
                                     </Typography>
                                     <Typography variant="h4" color="gray">
-                                        {profileData?.surname}
+                                        {owner.surname}
                                     </Typography>
                                 </Box>
                             </Box>
                         </Box>
                         <Box>
+                            {/*Delete dialog*/}
                             <Tooltip 
-                                title="Uredi"
+                                title="Obriši nalog"
                                 sx={{
                                     backgroundColor: "#339966", 
                                     color: "#fff", 
@@ -137,7 +137,7 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                                         } 
                                     }} 
                                 >
-                                    <EditOutlinedIcon fontSize="inherit" />
+                                    <DeleteOutlineIcon fontSize="inherit" />
                                 </IconButton>
                             </Tooltip>
                         </Box>
@@ -149,46 +149,37 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                         <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
                             <EmailOutlinedIcon />
                             <Typography variant="h6" color="gray">
-                                {profileData?.email}
+                                {owner.email}
+                            </Typography>
+                        </Box>                        
+                        <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
+                            <CallOutlinedIcon />
+                            <Typography variant="h6">
+                                {owner.phoneNumber}
                             </Typography>
                         </Box>
-                        {profileData?.companyName && (
-                            <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
-                                <BusinessOutlinedIcon />
-                                <Typography variant="h6">
-                                    {profileData.companyName}
-                                </Typography>
-                            </Box>
-                        )}
-                        <Box display='flex' flexDirection='column' gap={2}> 
-                            {userRole === "Owner" && (
-                                <>
-                                    <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
-                                        <LocalPhoneOutlinedIcon />
-                                        <Typography variant="h6">
-                                            {profileData?.phoneNumber}
-                                        </Typography>
-                                    </Box>
-                                    
-                                    <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
-                                        {profileData?.numberOfVehicles! > 0 ? (
-                                            getNumberOfVehiclesInfo(profileData?.numberOfVehicles!)
-                                        ) : (
-                                            <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
-                                                <InfoOutlinedIcon />
-                                                <Typography variant="h6">
-                                                    Nema dodatih vozila.
-                                                </Typography>
-                                            </Box>
-                                        )}
-                                    </Box>
-                                    <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
-                                        {getServiceIcon(profileData?.notificationService)}
-                                        <Typography variant="h6">
-                                            {getServiceName(profileData?.notificationService)}
-                                        </Typography>
-                                    </Box>
-                                </>
+                        <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
+                            <BusinessOutlinedIcon />
+                            <Typography variant="h6">
+                                {owner.companyName}
+                            </Typography>
+                        </Box>
+                        <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
+                            {getServiceIcon(owner.notificationService)}
+                            <Typography variant="h6">
+                                {getServiceName(owner.notificationService)}
+                            </Typography>
+                        </Box>
+                        <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray' mt={3}>
+                            {owner?.numberOfVehicles! > 0 ? (
+                                getNumberOfVehiclesInfo(owner.numberOfVehicles)
+                            ) : (
+                                <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
+                                    <InfoOutlinedIcon />
+                                    <Typography variant="h6">
+                                        Nema dodatih vozila.
+                                    </Typography>
+                                </Box>
                             )}
                         </Box>
                         <Box position='absolute' bottom={20}>
@@ -203,4 +194,4 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
     )
 }
 
-export default UserProfilePreview;
+export default OwnerProfilePreview;

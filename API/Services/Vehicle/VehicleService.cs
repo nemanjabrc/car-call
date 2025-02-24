@@ -29,9 +29,61 @@ namespace API.Services.Vehicle
 
         }
 
-        public Task<ServiceResponse<GetVehicleDto>> AddOwnersVehicle(AddVehicleDto newVehicle)
+        public async Task<ServiceResponse<GetVehicleDto>> AddOwnersVehicle(AddVehicleDto newVehicle, int ownerId)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<GetVehicleDto>();
+            var companyId = _userHttpContextService.GetUserCompanyId();
+
+            var owner = await _context.Owners.FirstOrDefaultAsync(o => o.Id == ownerId);
+            if (owner is null)
+            {
+                response.Success = false;
+                response.Message = $"Nije pronadjen vlasnik sa id: {ownerId} u bazi.";
+                return response;
+            }
+
+            var vehicle = _mapper.Map<Models.Vehicle>(newVehicle);
+            vehicle.Owner = owner;
+            vehicle.DateOfRegistration = newVehicle.DateOfRegistration.Date;
+            vehicle.DateOfExpiration = newVehicle.DateOfRegistration.Date.AddYears(1);
+            vehicle.IsRegistered = (vehicle.DateOfExpiration - DateTime.Now).Days > 30;
+
+            var notification = await _context.RegistrationNotifications.FirstOrDefaultAsync(n => n.Company.Id == companyId);
+            if (notification is null)
+            {
+                response.Success = false;
+                response.Message = "Nije pronadjen podsjetnik za registraciju predvidjen ovo vozilo.";
+                return response;
+            }
+            vehicle.RegistrationNotification = notification;
+
+            MaintenanceNotification maintenanceNotification = new()
+            {
+                Message = $""" 
+                Podsjećamo Vas da je vrijeme za godišnji servis vašeg vozila.
+                Redovno održavanje je ključno za sigurnost i dugotrajnost vozila.
+                """,
+
+                StartDate = newVehicle.DateOfLastMaintenance.Date,
+                NumberOfDays = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 : 365,
+                DateOfNotification = newVehicle.DateOfLastMaintenance.Date.AddYears(1).AddMonths(-1),
+                Repetitive = true,
+                Vehicle = vehicle
+            };
+
+            _context.MaintenanceNotifications.Add(maintenanceNotification);
+            _context.Vehicles.Add(vehicle);
+            var result = await _context.SaveChangesAsync() > 0;
+            if (!result)
+            {
+                response.Success = false;
+                response.Message = "Greška prilikom dodavanja novog vozila.";
+                return response;
+            }
+
+            response.Data = _mapper.Map<GetVehicleDto>(vehicle);
+            response.Success = true;
+            return response;
         }
 
         public async Task<ServiceResponse<GetVehicleDto>> AddVehicle(AddVehicleDto newVehicle)
@@ -52,12 +104,12 @@ namespace API.Services.Vehicle
             if (notification is null)
             {
                 response.Success = false;
-                response.Message = "Greška pri dodavanju notifikacije za ovo vozilo.";
+                response.Message = "Nije pronadjen podsjetnik za registraciju predvidjen ovo vozilo.";
                 return response;
             }
             vehicle.RegistrationNotification = notification;
 
-            MaintenanceNotification maintenanceNotification = new MaintenanceNotification
+            MaintenanceNotification maintenanceNotification = new()
             {
                 Message = $""" 
                 Podsjećamo Vas da je vrijeme za godišnji servis vašeg vozila.
@@ -125,7 +177,10 @@ namespace API.Services.Vehicle
 
         public async Task<ServiceResponse<List<GetVehicleDto>>> GetAllVehiclesFromCompany(int companyId)
         {
-            var response = new ServiceResponse<List<GetVehicleDto>>();
+            var response = new ServiceResponse<List<GetVehicleDto>>
+            {
+                Data = new List<GetVehicleDto>()
+            };
 
             try
             {
@@ -135,10 +190,16 @@ namespace API.Services.Vehicle
                     throw new Exception($"Kompanija sa id: {companyId} nije pronadjena.");
                 }
 
-                response.Data = await _context.Vehicles
+                await foreach (var vehicle in _context.Vehicles
+                    .Include(v => v.MaintenanceNotifications)
                     .Include(v => v.Owner)
-                    .Where(v => v.Owner != null && v.Owner.CompanyId == company.Id)
-                    .Select(v => _mapper.Map<GetVehicleDto>(v)).ToListAsync();
+                    .Where(v => v.Owner != null && v.Owner.CompanyId == company.Id).AsAsyncEnumerable())
+                {
+                    int numberOfNotifications = vehicle.MaintenanceNotifications.Count + 1;
+                    var vehicleDto = _mapper.Map<GetVehicleDto>(vehicle);
+                    vehicleDto.NumberOfNotifications = numberOfNotifications;
+                    response.Data.Add(vehicleDto);
+                }
 
                 response.Success = true;
             }

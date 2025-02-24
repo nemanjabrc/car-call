@@ -2,10 +2,11 @@ export interface Owner {
     id: number
     name: string
     surname: string
-    userName: string
+    username: string
     email: string
     companyName: string
     phoneNumber: string
-    dateOfCreation: string
+    notificationService: string
+    creationDate: string
     numberOfVehicles: number
 }

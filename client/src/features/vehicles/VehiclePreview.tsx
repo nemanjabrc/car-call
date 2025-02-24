@@ -1,24 +1,25 @@
+import { Box, Paper, Grid, Avatar, Typography, Button, Snackbar, Alert, IconButton, Tooltip } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import DeleteVehicleDialog from "./DeleteVehicleDialog";
+import dayjs from "dayjs";
+import { useState, useEffect } from "react";
+import agent from "../../app/api/agent";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchVehicleAsync, updateVehicle, vehicleSelectors } from "./vehiclesSlice";
-import { useEffect, useState } from "react";
-import { Alert, Avatar, Box, Button, Grid, IconButton, Paper, Snackbar, Tooltip, Typography } from "@mui/material";
+import { vehicleSelectors, updateVehicle, fetchVehicleAsync } from "./vehiclesSlice";
 import TwoWheelerOutlinedIcon from '@mui/icons-material/TwoWheelerOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined';
 import AgricultureOutlinedIcon from '@mui/icons-material/AgricultureOutlined';
 import RvHookupOutlinedIcon from '@mui/icons-material/RvHookupOutlined';
-import LoadingComponent from "../../app/layout/LoadingComponent";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from '@mui/icons-material/Error';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import NotificationAddOutlinedIcon from '@mui/icons-material/NotificationAddOutlined';
 import PublishedWithChangesOutlinedIcon from '@mui/icons-material/PublishedWithChangesOutlined';
-import dayjs from "dayjs";
-import agent from "../../app/api/agent";
-import DeleteVehicleDialog from "./DeleteVehicleDialog";
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import { fetchOwnerAsync, ownerSelectors } from "../owner/ownerSlice";
 
 const getIcon = (category: string) => {
     switch (category) {
@@ -72,13 +73,16 @@ const formatRegistrationMessage: any = (daysTillExpiration: number) => {
     }
 }
 
-
-const VehicleDetails = () => {
+const VehiclePreview = () => {
 
     const dispatch = useAppDispatch();
-    const {id} = useParams<{id: string}>();
-    const vehicle = useAppSelector(state => vehicleSelectors.selectById(state, parseInt(id!)));
+    const {vehicleId} = useParams<{vehicleId: string}>();
+    const vehicle = useAppSelector(state => vehicleSelectors.selectById(state, parseInt(vehicleId!)));
     const {vehicleLoaded} = useAppSelector(state => state.vehicle);
+
+    const {ownerId} = useParams<{ownerId: string}>();
+    const owner = useAppSelector(state => ownerSelectors.selectById(state, parseInt(ownerId!)));
+    const {ownerLoaded} = useAppSelector(state => state.owner);
 
     const [RenewSuccesAlert, setRenewSuccesAlert] = useState(false);
 
@@ -93,19 +97,26 @@ const VehicleDetails = () => {
     }
 
     useEffect(() => {
-        if(!vehicle && id || vehicleLoaded == false) {
-            dispatch(fetchVehicleAsync(parseInt(id!)));
+        if(!vehicle && vehicleId || vehicleLoaded == false) {
+            dispatch(fetchVehicleAsync(parseInt(vehicleId!)));
         }
-    }, [id, vehicle, vehicleLoaded, dispatch]);
+    }, [vehicleId, vehicle, vehicleLoaded, dispatch]);
+
+    useEffect(() => {
+        if(!owner && ownerId || ownerLoaded == false) {
+            dispatch(fetchOwnerAsync(parseInt(ownerId!)));
+        }
+    }, [ownerId, owner, ownerLoaded, dispatch]);
 
 
-    if(!vehicle)
+    if(!vehicle || !owner)
         return <LoadingComponent message="Učitavanje podataka o vozilu..." />
 
     const today = dayjs().startOf('day');
     const dateOfExpiration = dayjs(vehicle.dateOfExpiration);
 
     const daysTillExpiration = dateOfExpiration.diff(today, 'day');
+
 
     return (
         <Box component={Paper} display='flex' justifyContent='center' alignItems='center' pt={2} pb={3}>
@@ -117,7 +128,9 @@ const VehicleDetails = () => {
                         >
                             {getIcon(vehicle.category)}
                         </Avatar>
-                        <Typography variant="h6" color="grey">{vehicle.category}</Typography>
+                        <Typography variant="h6" color="grey">
+                            {vehicle.category}
+                        </Typography>
                     </Box>
                 </Grid>
 
@@ -125,11 +138,17 @@ const VehicleDetails = () => {
                     <Box display='flex' justifyContent='space-between' mt={5} ml={5} mr={5}>
                         <Box display='flex' flexDirection='column' justifyContent='start'>
                             <Box display='flex' justifyContent='start' alignItems='end' gap={2}>
-                                <Typography variant="h3" fontWeight='bold' color="#339966">{vehicle.manufacturer}</Typography>
-                                <Typography variant="h4" fontWeight='bold' color="grey">{vehicle.model}</Typography>
+                                <Typography variant="h3" fontWeight='bold' color="#339966">
+                                    {vehicle.manufacturer}
+                                </Typography>
+                                <Typography variant="h4" fontWeight='bold' color="grey">
+                                    {vehicle.model}
+                                </Typography>
                             </Box>
                             <Box>
-                                <Typography variant="h4" color="grey">{vehicle.yearOfManufacture}</Typography>
+                                <Typography variant="h4" color="grey">
+                                    {vehicle.yearOfManufacture}
+                                </Typography>
                             </Box>
                             <Box display='flex' flexDirection='column' justifyContent='start' alignItems='start' mt={4}>
                                 <Typography variant="h6" color="grey">{vehicle.registrationPlate}</Typography>
@@ -199,29 +218,30 @@ const VehicleDetails = () => {
                                     </Typography>
                                 )}
                             </Box>
-                            <Box display='flex' justifyContent='flex-start' alignItems='center' gap={3} mt={1}>
-                                <Button component={Link} to={`/vehiclenotifications/${id}`} variant="contained" sx={{backgroundColor: '#339966'}}>
-                                    Pogledaj sve
-                                </Button>
-                                <Box>
-                                    <Tooltip title="Dodaj novi podsjetnik" placement="right">
-                                        <IconButton 
-                                            component={Link}
-                                            to={`/addnotification/${id}`}
-                                            size="large"
-                                            sx={{ 
+                            <Box display='flex' justifyContent='center' alignItems='center' gap={2} mt={5}>
+                                <Typography variant="body1" color="grey">
+                                    Vlasnik:
+                                </Typography>
+                                <Tooltip title="Otvori profil" placement="bottom">
+                                    <IconButton
+                                        component={Link}
+                                        to={`/owners/${ownerId}`} 
+                                        size="medium"
+                                        sx={{ 
+                                            backgroundColor: "#339966", 
+                                            color: "#fff", 
+                                            "&:hover": { 
                                                 backgroundColor: "#339966", 
-                                                color: "#fff", 
-                                                "&:hover": { 
-                                                    backgroundColor: "#339966", 
-                                                    color: "#fff" 
-                                                } 
-                                            }}     
-                                        > 
-                                            <NotificationAddOutlinedIcon fontSize="inherit" />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
+                                                color: "#fff" 
+                                            } 
+                                        }}     
+                                    > 
+                                        <PersonOutlineOutlinedIcon fontSize="inherit" />
+                                    </IconButton>
+                                </Tooltip>
+                                <Typography variant="h6" color="grey">
+                                    {owner.name} {owner.surname}
+                                </Typography>
                             </Box>
                         </Box>
                         <Box>
@@ -244,4 +264,4 @@ const VehicleDetails = () => {
     )
 }
 
-export default VehicleDetails;
+export default VehiclePreview;

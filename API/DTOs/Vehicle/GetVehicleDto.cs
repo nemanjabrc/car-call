@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.DTOs.Owner;
 
 namespace API.DTOs.Vehicle
 {
@@ -17,6 +18,6 @@ namespace API.DTOs.Vehicle
         public DateTime DateOfExpiration { get; set; }
         public bool IsRegistered { get; set; }
         public int NumberOfNotifications { get; set; }
-
+        public int OwnerId { get; set; }
     }
 }

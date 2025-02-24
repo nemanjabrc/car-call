@@ -31,6 +31,7 @@ export const fetchVehicleAsync = createAsyncThunk<Vehicle, number>(
             console.log(response);
             return response;
         } catch (error: any) {
+            console.log(error);
             return thunkAPI.rejectWithValue({error: error.data});
         }
     }

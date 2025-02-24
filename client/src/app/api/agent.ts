@@ -55,9 +55,11 @@ const Vehicle = {
     getVehicle: (id: number) => requests.get(`vehicle/getVehicle/${id}`),
     getVehicles: () => requests.get('vehicle/getVehicles'),
     addVehicle: (vehicle: any) => requests.post('vehicle/addVehicle', vehicle),
+    addOwnersVehicle: (ownerId:number, vehicle: any) => requests.post(`vehicle/addOwnersVehicle/${ownerId}`, vehicle),
     renewVehicleRegistration: (vehicleId: number) => requests.put(`vehicle/renewRegistration/${vehicleId}`),
-    deleteVehicle: (vehicleId: number) => requests.delete(`Vehicle/deleteVehicle/${vehicleId}`),
+    deleteVehicle: (vehicleId: number) => requests.delete(`vehicle/deleteVehicle/${vehicleId}`),
     getAllVehiclesFromCompany: (companyId: number) => requests.get(`vehicle/getAllVehiclesFromCompany/${companyId}`),
+    getOwnersVehicles: (ownerId: number) => requests.get(`vehicle/getOwnersVehicles/${ownerId}`),
 }
 
 const Notification = {

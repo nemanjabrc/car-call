@@ -456,11 +456,12 @@ namespace API.Services.Account
                         Id = o.Id,
                         Name = o.Name,
                         Surname = o.Surname,
-                        UserName = o.User.UserName,
+                        Username = o.User.UserName,
                         Email = o.Email,
                         CompanyName = o.Company.Name,
                         PhoneNumber = o.PhoneNumber,
-                        DateOfCreation = o.User.CreationDate,
+                        NotificationService = o.NotificationService,
+                        CreationDate = o.User.CreationDate,
                         NumberOfVehicles = o.Vehicles.Count
                     }).ToListAsync();
 
@@ -487,11 +488,12 @@ namespace API.Services.Account
                     Id = o.Id,
                     Name = o.Name,
                     Surname = o.Surname,
-                    UserName = o.User.UserName,
+                    Username = o.User.UserName,
                     Email = o.Email,
                     CompanyName = o.Company.Name,
                     PhoneNumber = o.PhoneNumber,
-                    DateOfCreation = o.User.CreationDate,
+                    NotificationService = o.NotificationService,
+                    CreationDate = o.User.CreationDate,
                     NumberOfVehicles = o.Vehicles.Count
                 })
                 .FirstOrDefaultAsync();

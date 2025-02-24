@@ -12,7 +12,7 @@ namespace API.Services.Vehicle
         Task<ServiceResponse<GetVehicleDto>> GetVehicle(int vehicleId);
         Task<ServiceResponse<List<GetVehicleDto>>> GetVehicles();
         Task<ServiceResponse<GetVehicleDto>> AddVehicle(AddVehicleDto newVehicle);
-        Task<ServiceResponse<GetVehicleDto>> AddOwnersVehicle(AddVehicleDto newVehicle);
+        Task<ServiceResponse<GetVehicleDto>> AddOwnersVehicle(AddVehicleDto newVehicle, int ownerId);
         Task<ServiceResponse<GetVehicleDto>> RenewRegistration(int vehicleId);
         Task<ServiceResponse<GetVehicleDto>> UpdateVehicle(UpdateVehicleDto updatedVehicle);
         Task<ServiceResponse<int>> DeleteVehicle(int vehicleId);

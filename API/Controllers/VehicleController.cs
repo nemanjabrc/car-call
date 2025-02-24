@@ -88,7 +88,21 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
-        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = "Admin,Operator")]
+        [HttpPost("addOwnersVehicle/{ownerId}")]
+        public async Task<ActionResult<GetVehicleDto>> AddOwnersVehicle([FromBody] AddVehicleDto newVehicle, [FromRoute] int ownerId)
+        {
+            var response = await _vehicleService.AddOwnersVehicle(newVehicle, ownerId);
+
+            if (!response.Success)
+            {
+                return BadRequest(response.Message);
+            }
+
+            return Ok(response.Data);
+        }
+
+        [Authorize(Roles = "Admin,Operator,Owner")]
         [HttpPut("renewRegistration/{vehicleId}")]
         public async Task<ActionResult<GetVehicleDto>> RenewRegistration([FromRoute] int vehicleId)
         {

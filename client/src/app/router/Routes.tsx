@@ -19,6 +19,10 @@ import RegisterOperatorForm from "../../features/operator/RegisterOperatorForm";
 import RegisterAdminForm from "../../features/admin/RegisterAdminForm";
 import OperatorsList from "../../features/operator/OperatorsList";
 import OperatorProfilePreview from "../../features/operator/OperatorProfilePreview";
+import OwnersList from "../../features/owner/OwnersList";
+import OwnerProfilePreview from "../../features/owner/OwnerProfilePreview";
+import VehiclesList from "../../features/vehicles/VehiclesList";
+import VehiclePreview from "../../features/vehicles/VehiclePreview";
 
 export const router = createBrowserRouter([
     {
@@ -46,6 +50,10 @@ export const router = createBrowserRouter([
             {path: 'addadmin', element: <RegisterAdminForm />},
             {path: 'operators', element: <OperatorsList />},
             {path: 'operators/:id', element: <OperatorProfilePreview />},
+            {path: 'owners', element: <OwnersList />},
+            {path: 'owners/:id', element: <OwnerProfilePreview />},
+            {path: 'vehicles', element: <VehiclesList />},
+            {path: 'vehicles/:vehicleId/:ownerId', element: <VehiclePreview />},
         ]
     }
 ])
