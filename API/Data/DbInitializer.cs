@@ -141,9 +141,6 @@ namespace API.Data
                 context.VehicleManufacturers.Add(manufacturer);
 
                 //Prikolice
-                manufacturer = new VehicleManufacturer { Name = "Schmitz Cargobull", CategoryId = 6 };
-                context.VehicleManufacturers.Add(manufacturer);
-
                 manufacturer = new VehicleManufacturer { Name = "Krone", CategoryId = 6 };
                 context.VehicleManufacturers.Add(manufacturer);
 
@@ -607,12 +604,6 @@ namespace API.Data
 
 
                 //PRIKOLICE
-                //Schmitz Cargobull
-                model = new VehicleModel { Name = "S.KO", VehicleManufacturerId = 33 };
-                context.VehicleModels.Add(model);
-                model = new VehicleModel { Name = "T.SS", VehicleManufacturerId = 33 };
-                context.VehicleModels.Add(model);
-
                 //Krone
                 model = new VehicleModel { Name = "Profi Liner", VehicleManufacturerId = 34 };
                 context.VehicleModels.Add(model);

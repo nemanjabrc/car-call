@@ -138,7 +138,7 @@ const VehiclePreview = () => {
                     <Box display='flex' justifyContent='space-between' mt={5} ml={5} mr={5}>
                         <Box display='flex' flexDirection='column' justifyContent='start'>
                             <Box display='flex' justifyContent='start' alignItems='end' gap={2}>
-                                <Typography variant="h3" fontWeight='bold' color="#339966">
+                                <Typography variant="h4" fontWeight='bold' color="#339966">
                                     {vehicle.manufacturer}
                                 </Typography>
                                 <Typography variant="h4" fontWeight='bold' color="grey">

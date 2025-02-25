@@ -16,9 +16,10 @@ const OwnersList = () => {
     const {ownersLoaded} = useAppSelector(state => state.owner);
 
     useEffect(() => {
-        if(!ownersLoaded)
+        if(!ownersLoaded) {
             dispatch(fetchOwnersAsync(userCompanyId!));
-    }, [ownersLoaded, dispatch, userCompanyId]);
+        }
+    }, [ownersLoaded, dispatch, userCompanyId]);   
 
     if(!ownersLoaded)
         return <LoadingComponent message="Učitavanje vlasnika..." />

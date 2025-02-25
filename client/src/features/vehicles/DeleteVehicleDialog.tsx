@@ -6,7 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { useAppDispatch } from '../../app/store/configureStore';
+import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
 import agent from '../../app/api/agent';
 import { Tooltip, IconButton, Box } from '@mui/material';
 import { setVehicle } from '../vehicles/vehiclesSlice';
@@ -24,6 +24,9 @@ const LogOutDialog = ({vehicleId, vehicleManufacturer, vehicleModel, vehicleregi
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const {user} = useAppSelector(state => state.account);
+  const userRole = user?.role;
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -36,7 +39,12 @@ const LogOutDialog = ({vehicleId, vehicleManufacturer, vehicleModel, vehicleregi
     try {
         await agent.Vehicle.deleteVehicle(vehicleId);
         dispatch(setVehicle());
-        navigate('/myvehicles');
+        if(userRole == 'Owner') {
+            navigate('/myvehicles');
+        }
+        else {
+            navigate('/vehicles');
+        }
     } catch (error: any) {
         console.log(error);
     }

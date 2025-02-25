@@ -28,10 +28,10 @@ const VehiclesLayout = () => {
                 </Box>
 
     return(
-        <Box sx={{mt: -6.5, ml: 7}} display='flex' justifyContent='center' alignItems='center'>
-            <Grid container rowSpacing={6} spacing={4} alignItems="strech" sx={{ width: "100%", mt: 0, mb: 0 }}>
-                {vehicles.map(vehicle => (
-                    <Grid item xs={12} sm={6} md={3} key={vehicle.id}>
+        <Box sx={{mt: 0, ml: 2, p: 0}} display='flex' justifyContent='center' alignItems='center'>
+            <Grid container rowSpacing={1} spacing={5} alignItems="strech" sx={{ width: "100%", mt: 0, mb: 0 }}>
+                {vehicles.map((vehicle, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={vehicle.id} p={0} sx={{ mt: index >= 4 ? 5 : 0 }}>
                         <VehicleCard vehicle={vehicle}/>
                     </Grid>
                 ))}

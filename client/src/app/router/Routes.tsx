@@ -23,6 +23,7 @@ import OwnersList from "../../features/owner/OwnersList";
 import OwnerProfilePreview from "../../features/owner/OwnerProfilePreview";
 import VehiclesList from "../../features/vehicles/VehiclesList";
 import VehiclePreview from "../../features/vehicles/VehiclePreview";
+import AddOwnersVehicleForm from "../../features/vehicles/AddOwnersVehicleForm";
 
 export const router = createBrowserRouter([
     {
@@ -54,6 +55,7 @@ export const router = createBrowserRouter([
             {path: 'owners/:id', element: <OwnerProfilePreview />},
             {path: 'vehicles', element: <VehiclesList />},
             {path: 'vehicles/:vehicleId/:ownerId', element: <VehiclePreview />},
+            {path: 'vehicles/addownersvehicle/:ownerId', element: <AddOwnersVehicleForm />},
         ]
     }
 ])

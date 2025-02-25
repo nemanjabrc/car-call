@@ -49,7 +49,6 @@ const ownerOptions: Options[] = [
 const operatorOptions: Options[] = [
   {title: 'Vlasnici', path: '/owners', icon: <PeopleAltOutlinedIcon fontSize='large' />},
   {title: 'Vozila', path: '/vehicles', icon: <DirectionsCarOutlinedIcon fontSize='large' />},
-  {title: 'Dodaj vozilo', path:'/addvehicle', icon: <AddCircleOutlineOutlinedIcon fontSize='large' />},
   {title: 'Dodaj vlasnika', path:'/addowner', icon: <PersonAddAltOutlinedIcon fontSize='large' />},
   {title: 'Moj nalog', path: '/myaccount', icon: <AccountCircleOutlinedIcon fontSize='large' />},
 ]
@@ -58,7 +57,6 @@ const adminOptions: Options[] = [
   {title: 'Vlasnici', path: '/owners', icon: <PeopleAltOutlinedIcon fontSize='large' />},
   {title: 'Vozila', path: '/vehicles', icon: <DirectionsCarOutlinedIcon fontSize='large' />},
   {title: 'Operateri', path: '/operators', icon: <PeopleAltOutlinedIcon fontSize='large' />},
-  {title: 'Dodaj vozilo', path:'/addvehicle', icon: <AddCircleOutlineOutlinedIcon fontSize='large' />},
   {title: 'Dodaj vlasnika', path:'/addowner', icon: <PersonAddAltOutlinedIcon fontSize='large' />},
   {title: 'Dodaj operatera', path:'/addoperator', icon: <PersonAddAltOutlinedIcon fontSize='large' />},
   {title: 'Moj nalog', path:'/myaccount', icon: <AccountCircleOutlinedIcon fontSize='large' />},

@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchOwnerAsync, ownerSelectors } from "./ownerSlice";
+import { fetchOwnerAsync, fetchOwnersVehiclesAsync, ownerSelectors, ownerVehiclesSelectors, setOwnerVehicles } from "./ownerSlice";
 import { useEffect } from "react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import dayjs from "dayjs";
-import { Box, Grid, Avatar, Typography, AvatarGroup, Tooltip, IconButton } from "@mui/material";
+import { Box, Grid, Avatar, Typography, AvatarGroup, Tooltip, IconButton, Button } from "@mui/material";
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'; 
@@ -13,6 +13,8 @@ import CallOutlinedIcon from '@mui/icons-material/CallOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import VehicleSlider from "../vehicles/vehicleCard/vehicleSlider/VehicleSlider";
 
 const getServiceName = (service: string | undefined) => {
     switch (service) {
@@ -42,7 +44,7 @@ const getServiceIcon = (service: string | undefined) => {
 
 const getNumberOfVehiclesInfo = (numberOfVehicles: number) => {
     if(numberOfVehicles == 1) {
-        return <Typography variant="h4" color="gray">
+        return <Typography variant="h6" color="gray">
                     1 vozilo
                 </Typography>
     }
@@ -62,13 +64,23 @@ const OwnerProfilePreview = () => {
     const dispatch = useAppDispatch();
     const {id} = useParams<{id: string}>();
     const owner = useAppSelector(state => ownerSelectors.selectById(state, parseInt(id!)));
+    const vehicles = useAppSelector(ownerVehiclesSelectors.selectAll);
     const {ownerLoaded} = useAppSelector(state => state.owner);
+    const {ownerVehiclesLoaded} = useAppSelector(state => state.owner);
 
     useEffect(() => {
+        dispatch(setOwnerVehicles());
         if(!owner && id || ownerLoaded == false) {
             dispatch(fetchOwnerAsync(parseInt(id!)));
         }
     }, [id, owner, ownerLoaded, dispatch]);
+
+    useEffect(() => {
+        if(!ownerVehiclesLoaded) {
+            dispatch(fetchOwnersVehiclesAsync(parseInt(id!)));
+        }
+    }, [id, ownerVehiclesLoaded, dispatch]);
+
 
     if(!owner)
         return <LoadingComponent message="Učitavanje profila vlasnika..." />
@@ -77,7 +89,7 @@ const OwnerProfilePreview = () => {
 
     return (
         <Box display='flex' justifyContent='center' alignItems='center' sx={{p: 4}}>
-            <Grid container>
+            <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>
                         <Box display='flex' justifyContent='start' alignItems='center' gap={4}>
@@ -98,7 +110,7 @@ const OwnerProfilePreview = () => {
                                         color: '#fff',
                                     }}
                                 >
-                                    operater
+                                    vlasnik
                                 </Typography>
                             </Avatar>
                             <Box display='flex' flexDirection='column' justifyContent='center' gap={1.5}>
@@ -144,7 +156,7 @@ const OwnerProfilePreview = () => {
                     </Box>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={4} md={4}>
                     <Box display='flex' flexDirection='column' justifyContent='start' mt={10}>
                         <Box display='flex' justifyContent='start' alignItems='center' gap={2} color='gray'>
                             <EmailOutlinedIcon />
@@ -182,11 +194,31 @@ const OwnerProfilePreview = () => {
                                 </Box>
                             )}
                         </Box>
-                        <Box position='absolute' bottom={20}>
-                            <Typography variant="body2" color="gray">
-                                Nalog kreiran {creationDate.format('DD.MM.YYYY')}.
-                            </Typography>
+                        <Box mt={3}>
+                            <Button
+                                component={Link}
+                                to={`/vehicles/addownersvehicle/${owner.id}`}
+                                variant="contained" 
+                                sx={{backgroundColor: '#339966'}} 
+                                endIcon={<AddCircleOutlineIcon />}
+                            >
+                                Dodaj vozilo
+                            </Button>
                         </Box>
+                    </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={8} md={8} mt={5}>
+                    <Box display='flex' justifyContent='center' alignItems='center'>
+                        {owner?.numberOfVehicles! > 0 && <VehicleSlider vehicles={vehicles} ownerId={owner.id} />}
+                    </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={8} md={8} mt={7}>
+                    <Box>
+                        <Typography variant="body2" color="gray">
+                            Nalog kreiran {creationDate.format('DD.MM.YYYY')}.
+                        </Typography>
                     </Box>
                 </Grid>
             </Grid>
