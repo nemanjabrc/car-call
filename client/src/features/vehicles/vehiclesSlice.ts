@@ -1,5 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Vehicle } from "../../app/models/vehicle";
+import { Vehicle, VehicleParams } from "../../app/models/vehicle";
 import { RootState } from "../../app/store/configureStore";
 import agent from "../../app/api/agent";
 
@@ -7,9 +7,23 @@ interface VehicleState {
     vehicleLoaded: boolean;
     vehiclesLoaded: boolean;
     status: string;
+    categories: string[];
+    vehicleParams: VehicleParams;
 }
 
 const vehiclesAdapter = createEntityAdapter<Vehicle>();
+
+function getAxiosParams(vehicleParams: VehicleParams) {
+    const params = new URLSearchParams();
+    if(vehicleParams.searchTerm) {
+        params.append('searchTerm', vehicleParams.searchTerm);
+    }
+    if(vehicleParams.categories) {
+        params.append('categories', vehicleParams.categories.toString());
+    }
+
+    return params;
+}
 
 export const fetchVehiclesAsync = createAsyncThunk<Vehicle[], void, {state: RootState}>(
     'vehicle/fetchVehiclesAsync',
@@ -37,11 +51,12 @@ export const fetchVehicleAsync = createAsyncThunk<Vehicle, number>(
     }
 )
 
-export const fetchVehiclesFromCompanyAsync = createAsyncThunk<Vehicle[], number>(
+export const fetchVehiclesFromCompanyAsync = createAsyncThunk<Vehicle[], number, {state: RootState}>(
     'vehicle/fetchVehiclesFromCompanyAsync',
     async(companyId, thunkAPI) => {
+        const params = getAxiosParams(thunkAPI.getState().vehicle.vehicleParams)
         try {
-            const response = await agent.Vehicle.getAllVehiclesFromCompany(companyId);
+            const response = await agent.Vehicle.getAllVehiclesFromCompany(companyId, params);
             return response;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data});
@@ -55,6 +70,8 @@ export const vehicleSlice = createSlice({
         vehicleLoaded: false,
         vehiclesLoaded: false,
         status: 'idle',
+        categories: [],
+        vehicleParams: {}
     }),
     reducers: {
         setVehicle: (state) => {
@@ -62,6 +79,13 @@ export const vehicleSlice = createSlice({
         },
         updateVehicle: (state) => {
             state.vehicleLoaded = false;
+        },
+        setVehicleParams: (state, action) => {
+            state.vehiclesLoaded = false;
+            state.vehicleParams = {...state.vehicleParams, ...action.payload};
+        },
+        resetVehicleParams: (state) => {
+            state.vehicleParams = {};
         }
     },
     extraReducers: (builder) => {
@@ -105,4 +129,4 @@ export const vehicleSlice = createSlice({
 
 export const vehicleSelectors = vehiclesAdapter.getSelectors((state: RootState) => state.vehicle);
 
-export const {setVehicle, updateVehicle} = vehicleSlice.actions;
+export const {setVehicle, updateVehicle, setVehicleParams, resetVehicleParams} = vehicleSlice.actions;

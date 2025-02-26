@@ -10,3 +10,7 @@ export interface Owner {
     creationDate: string
     numberOfVehicles: number
 }
+
+export interface OwnerParams {
+    searchTerm?: string;
+}

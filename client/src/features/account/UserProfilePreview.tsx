@@ -44,7 +44,7 @@ const getServiceIcon = (service: string | undefined) => {
 
 const getNumberOfVehiclesInfo = (numberOfVehicles: number) => {
     if(numberOfVehicles == 1) {
-        return <Typography variant="h4" color="gray">
+        return <Typography variant="h6" color="gray">
                     1 vozilo
                 </Typography>
     }

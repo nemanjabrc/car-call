@@ -11,3 +11,8 @@ export interface Vehicle {
   numberOfNotifications: number
   ownerId: number
 }
+
+export interface VehicleParams {
+  searchTerm?: string;
+  categories?: string[];
+}

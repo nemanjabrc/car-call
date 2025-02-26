@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { fetchOwnersAsync, ownerSelectors } from "./ownerSlice";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Box, Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Avatar, Button } from "@mui/material";
+import { Box, Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Avatar, Button, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
+import OwnerSearch from "./OwnerSearch";
 
 const OwnersList = () => {
 
@@ -21,15 +22,19 @@ const OwnersList = () => {
         }
     }, [ownersLoaded, dispatch, userCompanyId]);   
 
-    if(!ownersLoaded)
+    if(!owners)
         return <LoadingComponent message="Učitavanje vlasnika..." />
 
     return (
         <>
             <Box display='flex' flexDirection='column' justifyContent='space-between'>
-                <Typography variant="h4" gutterBottom sx={{color: 'gray', mb: 4}}>
-                    Vlasnici
-                </Typography>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                    <Typography variant="h4"  sx={{color: 'gray'}}>
+                        Vlasnici
+                    </Typography>
+                    <OwnerSearch />
+                </Box>
+                <Divider sx={{mt: 1, mb: 2}} />
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead sx={{backgroundColor: '#339966'}}>

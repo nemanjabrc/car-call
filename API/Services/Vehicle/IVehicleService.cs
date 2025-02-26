@@ -10,13 +10,13 @@ namespace API.Services.Vehicle
     public interface IVehicleService
     {
         Task<ServiceResponse<GetVehicleDto>> GetVehicle(int vehicleId);
-        Task<ServiceResponse<List<GetVehicleDto>>> GetVehicles();
+        Task<ServiceResponse<List<GetVehicleDto>>> GetVehicles(string categories);
         Task<ServiceResponse<GetVehicleDto>> AddVehicle(AddVehicleDto newVehicle);
         Task<ServiceResponse<GetVehicleDto>> AddOwnersVehicle(AddVehicleDto newVehicle, int ownerId);
         Task<ServiceResponse<GetVehicleDto>> RenewRegistration(int vehicleId);
         Task<ServiceResponse<GetVehicleDto>> UpdateVehicle(UpdateVehicleDto updatedVehicle);
         Task<ServiceResponse<int>> DeleteVehicle(int vehicleId);
-        Task<ServiceResponse<List<GetVehicleDto>>> GetAllVehiclesFromCompany(int companyId);
+        Task<ServiceResponse<List<GetVehicleDto>>> GetAllVehiclesFromCompany(int companyId, string searchTerm, string categories);
         Task<ServiceResponse<List<GetVehicleDto>>> GetOwnersVehicles(int ownerId);
     }
 }

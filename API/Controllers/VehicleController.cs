@@ -36,9 +36,9 @@ namespace API.Controllers
 
         [Authorize(Roles = "Owner")]
         [HttpGet("getVehicles")]
-        public async Task<ActionResult<List<GetVehicleDto>>> GetVehicles()
+        public async Task<ActionResult<List<GetVehicleDto>>> GetVehicles(string categories)
         {
-            var response = await _vehicleService.GetVehicles();
+            var response = await _vehicleService.GetVehicles(categories);
 
             if (!response.Success)
             {
@@ -49,9 +49,9 @@ namespace API.Controllers
         }
 
         [HttpGet("getAllVehiclesFromCompany/{companyId}")]
-        public async Task<ActionResult<List<GetVehicleDto>>> GetAllVehiclesFromCompany([FromRoute] int companyId)
+        public async Task<ActionResult<List<GetVehicleDto>>> GetAllVehiclesFromCompany([FromRoute] int companyId, string searchTerm, string categories)
         {
-            var response = await _vehicleService.GetAllVehiclesFromCompany(companyId);
+            var response = await _vehicleService.GetAllVehiclesFromCompany(companyId, searchTerm, categories);
 
             if (!response.Success)
             {

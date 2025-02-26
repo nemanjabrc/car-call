@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
-import { fetchVehiclesFromCompanyAsync, vehicleSelectors } from "./vehiclesSlice";
+import { fetchVehiclesFromCompanyAsync, setVehicleParams, vehicleSelectors } from "./vehiclesSlice";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Box, Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Avatar, Button } from "@mui/material";
+import { Box, Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Avatar, Button, Divider } from "@mui/material";
 import TwoWheelerOutlinedIcon from '@mui/icons-material/TwoWheelerOutlined';
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
@@ -10,6 +10,9 @@ import DirectionsBusOutlinedIcon from '@mui/icons-material/DirectionsBusOutlined
 import AgricultureOutlinedIcon from '@mui/icons-material/AgricultureOutlined';
 import RvHookupOutlinedIcon from '@mui/icons-material/RvHookupOutlined';
 import { Link } from "react-router-dom";
+import { fetchCategories } from "../lookupTables/lookupTablesSlice";
+import VehicleSerach from "./VehicleSearch";
+import CheckboxButtons from "../../app/components/CheckboxButtons";
 
 const getIcon = (category: string) => {
     switch (category) {
@@ -30,6 +33,15 @@ const getIcon = (category: string) => {
     }
 }
 
+const categories: string[] = [
+    "Automobili",
+    "Motocikli",
+    "Teretna vozila",
+    "Autobusi/minibusi",
+    "ATV/UTV/QUAD",
+    "Prikolice"
+]
+
 const VehiclesList = () => {
 
     const dispatch = useAppDispatch();
@@ -38,12 +50,17 @@ const VehiclesList = () => {
     const userCompanyId = user?.companyId;
 
     const vehicles = useAppSelector(vehicleSelectors.selectAll);
-    const {vehiclesLoaded} = useAppSelector(state => state.vehicle);
+    const {vehiclesLoaded, vehicleParams} = useAppSelector(state => state.vehicle);
 
     useEffect(() => {
         if(!vehiclesLoaded)
             dispatch(fetchVehiclesFromCompanyAsync(userCompanyId!));
     }, [vehiclesLoaded, dispatch, userCompanyId]);
+
+    useEffect(() => {
+        dispatch(fetchCategories());
+    }, [dispatch]);
+
 
     if(!vehicles)
         return <LoadingComponent message="Učitavanje vozila..." />
@@ -51,9 +68,22 @@ const VehiclesList = () => {
     return (
         <>
             <Box display='flex' flexDirection='column' justifyContent='space-between'>
-                <Typography variant="h4" gutterBottom sx={{color: 'gray', mb: 4}}>
-                    Vozila
-                </Typography>
+                <Box display='flex' flexDirection='column'>
+                    <Box display='flex' justifyContent='space-between' alignItems='center' sx={{mb: 2}}>
+                        <Typography variant="h4" sx={{color: 'gray'}}>
+                            Vozila
+                        </Typography> 
+                        <VehicleSerach />
+                    </Box> 
+                    <Box display='flex' justifyContent='start' alignItems='center'>
+                        <CheckboxButtons
+                            items={categories}
+                            checked={vehicleParams.categories}
+                            onChange={(items: string[]) => dispatch(setVehicleParams({categories: items}))}
+                        />
+                    </Box>
+                </Box>
+                <Divider sx={{mt: 1, mb: 2}} />
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead sx={{backgroundColor: '#339966'}}>

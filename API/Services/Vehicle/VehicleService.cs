@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs.Vehicle;
+using API.ExtensionMethods;
 using API.Models;
 using API.Services.UserContext;
 using AutoMapper;
@@ -175,7 +176,7 @@ namespace API.Services.Vehicle
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetVehicleDto>>> GetAllVehiclesFromCompany(int companyId)
+        public async Task<ServiceResponse<List<GetVehicleDto>>> GetAllVehiclesFromCompany(int companyId, string searchTerm, string categories)
         {
             var response = new ServiceResponse<List<GetVehicleDto>>
             {
@@ -190,18 +191,29 @@ namespace API.Services.Vehicle
                     throw new Exception($"Kompanija sa id: {companyId} nije pronadjena.");
                 }
 
-                await foreach (var vehicle in _context.Vehicles
+                var query = _context.Vehicles
                     .Include(v => v.MaintenanceNotifications)
                     .Include(v => v.Owner)
-                    .Where(v => v.Owner != null && v.Owner.CompanyId == company.Id).AsAsyncEnumerable())
-                {
-                    int numberOfNotifications = vehicle.MaintenanceNotifications.Count + 1;
-                    var vehicleDto = _mapper.Map<GetVehicleDto>(vehicle);
-                    vehicleDto.NumberOfNotifications = numberOfNotifications;
-                    response.Data.Add(vehicleDto);
-                }
+                    .Where(v => v.Owner != null && v.Owner.CompanyId == company.Id)
+                    .SearchVehicle(searchTerm)
+                    .FilterVehicles(categories)
+                    .Select(vehicle => new GetVehicleDto
+                    {
+                        Id = vehicle.Id,
+                        Category = vehicle.Category,
+                        Manufacturer = vehicle.Manufacturer,
+                        Model = vehicle.Model,
+                        YearOfManufacture = vehicle.YearOfManufacture,
+                        RegistrationPlate = vehicle.RegistrationPlate,
+                        DateOfRegistration = vehicle.DateOfRegistration,
+                        DateOfExpiration = vehicle.DateOfExpiration,
+                        IsRegistered = vehicle.IsRegistered,
+                        NumberOfNotifications = vehicle.MaintenanceNotifications.Count + 1,
+                        OwnerId = vehicle.Owner.Id
+                    }).AsQueryable();
 
                 response.Success = true;
+                response.Data = await query.ToListAsync();
             }
             catch (Exception ex)
             {
@@ -263,7 +275,7 @@ namespace API.Services.Vehicle
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetVehicleDto>>> GetVehicles()
+        public async Task<ServiceResponse<List<GetVehicleDto>>> GetVehicles(string categories)
         {
             var response = new ServiceResponse<List<GetVehicleDto>>
             {
@@ -275,17 +287,29 @@ namespace API.Services.Vehicle
 
             var owner = await _context.Owners.FirstOrDefaultAsync(o => o.User.Id == currentUser.Id);
 
-            await foreach (var vehicle in _context.Vehicles
+            var query = _context.Vehicles
                 .Include(v => v.MaintenanceNotifications)
-                .Where(v => v.Owner.Id == owner.Id).AsAsyncEnumerable())
-            {
-                int numberOfNotifications = vehicle.MaintenanceNotifications.Count + 1;
-                var vehicleDto = _mapper.Map<GetVehicleDto>(vehicle);
-                vehicleDto.NumberOfNotifications = numberOfNotifications;
-                response.Data.Add(vehicleDto);
-            }
+                .Include(v => v.Owner)
+                .FilterVehicles(categories)
+                .Where(v => v.Owner.Id == owner.Id)
+                .Select(vehicle => new GetVehicleDto
+                {
+                    Id = vehicle.Id,
+                    Category = vehicle.Category,
+                    Manufacturer = vehicle.Manufacturer,
+                    Model = vehicle.Model,
+                    YearOfManufacture = vehicle.YearOfManufacture,
+                    RegistrationPlate = vehicle.RegistrationPlate,
+                    DateOfRegistration = vehicle.DateOfRegistration,
+                    DateOfExpiration = vehicle.DateOfExpiration,
+                    IsRegistered = vehicle.IsRegistered,
+                    NumberOfNotifications = vehicle.MaintenanceNotifications.Count + 1,
+                    OwnerId = vehicle.Owner.Id
+                }).AsQueryable();
 
             response.Success = true;
+            response.Data = await query.ToListAsync();
+
             return response;
         }
 

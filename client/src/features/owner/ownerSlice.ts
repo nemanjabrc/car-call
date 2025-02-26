@@ -1,5 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Owner } from "../../app/models/owner";
+import { Owner, OwnerParams } from "../../app/models/owner";
 import agent from "../../app/api/agent";
 import { RootState } from "../../app/store/configureStore";
 import { Vehicle } from "../../app/models/vehicle";
@@ -14,6 +14,7 @@ interface OwnerState {
     ownersLoaded: boolean;
     ownerVehiclesLoaded: boolean;
     status: string;
+    ownerParams: OwnerParams;
 }
 
 const initialState: OwnerState = {
@@ -22,14 +23,25 @@ const initialState: OwnerState = {
     ownerLoaded: false,
     ownersLoaded: false,
     ownerVehiclesLoaded: false,
-    status: 'idle'
+    status: 'idle',
+    ownerParams: {}
 }
 
-export const fetchOwnersAsync = createAsyncThunk<Owner[], number>(
+function getAxiosParams(ownerParams: OwnerParams) {
+    const params = new URLSearchParams();
+    if(ownerParams.searchTerm) {
+        params.append('searchTerm', ownerParams.searchTerm);
+    }
+
+    return params;
+}
+
+export const fetchOwnersAsync = createAsyncThunk<Owner[], number, {state: RootState}>(
     'owner/fetchOwnersAsync',
     async(companyId, thunkAPI) => {
+        const params = getAxiosParams(thunkAPI.getState().owner.ownerParams);
         try {
-            const response = await agent.Account.getAllOwnersFromCompany(companyId);
+            const response = await agent.Account.getAllOwnersFromCompany(companyId, params);
             return response;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.state});
@@ -74,6 +86,13 @@ export const ownerSlice = createSlice({
         setOwnerVehicles: (state) => {
             state.ownerVehiclesLoaded = false;
             ownerVehiclesAdapter.removeAll(state.ownerVehicles);
+        },
+        setOwnerParams: (state, action) => {
+            state.ownersLoaded = false;
+            state.ownerParams = {...state.ownerParams, ...action.payload};
+        },
+        resetOwnerParams: (state) => {
+            state.ownerParams = {};
         }
     },
     extraReducers: (builder) => {
@@ -118,4 +137,4 @@ export const ownerSlice = createSlice({
 export const ownerSelectors = ownersAdapter.getSelectors((state: RootState) => state.owner.owners);
 export const ownerVehiclesSelectors = ownerVehiclesAdapter.getSelectors((state: RootState) => state.owner.ownerVehicles);
 
-export const {setOwner, updateOwner, setOwnerVehicles} = ownerSlice.actions;
+export const {setOwner, updateOwner, setOwnerVehicles, setOwnerParams, resetOwnerParams} = ownerSlice.actions;

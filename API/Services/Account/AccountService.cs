@@ -6,6 +6,7 @@ using API.Data;
 using API.DTOs.Owner;
 using API.DTOs.User;
 using API.DTOs.Vehicle;
+using API.ExtensionMethods;
 using API.Helpers.Email;
 using API.Helpers.Password;
 using API.Models;
@@ -437,7 +438,7 @@ namespace API.Services.Account
         }
 
 
-        public async Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwnersFromCompany(int companyId)
+        public async Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwnersFromCompany(int companyId, string searchTerm)
         {
             var response = new ServiceResponse<List<GetOwnerDto>>();
 
@@ -449,7 +450,8 @@ namespace API.Services.Account
                     throw new Exception($"Kompanija sa id: {companyId} nije pronadjena.");
                 }
 
-                var owners = await _context.Owners
+                var query = _context.Owners
+                    .SearchOwner(searchTerm)
                     .Where(o => o.CompanyId == companyId)
                     .Select(o => new GetOwnerDto
                     {
@@ -463,7 +465,9 @@ namespace API.Services.Account
                         NotificationService = o.NotificationService,
                         CreationDate = o.User.CreationDate,
                         NumberOfVehicles = o.Vehicles.Count
-                    }).ToListAsync();
+                    }).AsQueryable();
+
+                var owners = await query.ToListAsync();
 
                 response.Success = true;
                 response.Data = owners;
@@ -511,7 +515,7 @@ namespace API.Services.Account
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany(int companyId)
+        public async Task<ServiceResponse<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany(int companyId, string searchTerm)
         {
             var response = new ServiceResponse<List<GetOperatorProfileDto>>();
 
@@ -523,7 +527,8 @@ namespace API.Services.Account
                     throw new Exception($"Kompanija sa id: {companyId} nije pronađena.");
                 }
 
-                var operators = await _context.Users
+                var query = _context.Users
+                    .SearchOperator(searchTerm)
                     .Where(user => user.CompanyId == companyId &&
                                 _context.UserRoles
                                     .Where(ur => ur.UserId == user.Id)
@@ -533,7 +538,9 @@ namespace API.Services.Account
                                             (ur, r) => r)
                                     .Any(role => role.NormalizedName == "OPERATOR"))
                     .Select(user => _mapper.Map<GetOperatorProfileDto>(user))
-                    .ToListAsync();
+                    .AsQueryable();
+
+                var operators = await query.ToListAsync();
 
                 response.Data = operators;
                 response.Success = true;

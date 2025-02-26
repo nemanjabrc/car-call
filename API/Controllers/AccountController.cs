@@ -169,9 +169,9 @@ namespace API.Controllers
         }
 
         [HttpGet("getAllOperatorsFromCompany/{companyId}")]
-        public async Task<ActionResult<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany([FromRoute] int companyId)
+        public async Task<ActionResult<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany([FromRoute] int companyId, string searchTerm)
         {
-            var response = await _accountService.GetAllOperatorsFromCompany(companyId);
+            var response = await _accountService.GetAllOperatorsFromCompany(companyId, searchTerm);
 
             if (!response.Success)
             {
@@ -220,9 +220,9 @@ namespace API.Controllers
         }
 
         [HttpGet("getAllOwnersFromCompany/{companyId}")]
-        public async Task<ActionResult<List<GetOwnerDto>>> GetAllOwnersFromCompany([FromRoute] int companyId)
+        public async Task<ActionResult<List<GetOwnerDto>>> GetAllOwnersFromCompany([FromRoute] int companyId, string searchTerm)
         {
-            var response = await _accountService.GetAllOwnersFromCompany(companyId);
+            var response = await _accountService.GetAllOwnersFromCompany(companyId, searchTerm);
 
             if (!response.Success)
             {

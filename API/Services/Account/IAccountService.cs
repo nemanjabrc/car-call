@@ -20,9 +20,9 @@ namespace API.Services.Account
         Task<ServiceResponse<GetOperatorProfileDto>> GetCurrentOperatorProfile();
         Task<ServiceResponse<GetAdminProfileDto>> GetCurrentAdminProfile();
         Task<ServiceResponse<GetSuperadminProfileDto>> GetSuperadminProfile();
-        Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwnersFromCompany(int companyId);
+        Task<ServiceResponse<List<GetOwnerDto>>> GetAllOwnersFromCompany(int companyId, string searchTerm);
         Task<ServiceResponse<GetOwnerDto>> GetOwnerFromCompany(int ownerId);
-        Task<ServiceResponse<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany(int companyId);
+        Task<ServiceResponse<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany(int companyId, string searchTerm);
         Task<ServiceResponse<GetOperatorProfileDto>> GetOperatorProfile(string operatorId);
         Task<ServiceResponse<IdentityResult>> DeleteOperator(string operatorId);
     }

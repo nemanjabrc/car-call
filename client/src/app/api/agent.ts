@@ -35,7 +35,7 @@ const Account = {
     getAllOperatorsFromCompany: (companyId: number) => requests.get(`account/getAllOperatorsFromCompany/${companyId}`),
     getOperatorProfile: (operatorId: string) => requests.get(`account/getOperatorProfile/${operatorId}`),
     deleteOperator: (operatorId: string) => requests.delete(`account/deleteOperator/${operatorId}`),
-    getAllOwnersFromCompany: (companyId: number) => requests.get(`account/getAllOwnersFromCompany/${companyId}`),
+    getAllOwnersFromCompany: (companyId: number, params: URLSearchParams) => requests.get(`account/getAllOwnersFromCompany/${companyId}`, params),
     getOwnerFromCompany: (ownerId: number) => requests.get(`account/getOwnerFromCompany/${ownerId}`),
 }
 
@@ -58,7 +58,7 @@ const Vehicle = {
     addOwnersVehicle: (ownerId:number, vehicle: any) => requests.post(`vehicle/addOwnersVehicle/${ownerId}`, vehicle),
     renewVehicleRegistration: (vehicleId: number) => requests.put(`vehicle/renewRegistration/${vehicleId}`),
     deleteVehicle: (vehicleId: number) => requests.delete(`vehicle/deleteVehicle/${vehicleId}`),
-    getAllVehiclesFromCompany: (companyId: number) => requests.get(`vehicle/getAllVehiclesFromCompany/${companyId}`),
+    getAllVehiclesFromCompany: (companyId: number, params: URLSearchParams) => requests.get(`vehicle/getAllVehiclesFromCompany/${companyId}`, params),
     getOwnersVehicles: (ownerId: number) => requests.get(`vehicle/getOwnersVehicles/${ownerId}`),
 }
 
