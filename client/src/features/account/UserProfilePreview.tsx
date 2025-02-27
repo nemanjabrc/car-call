@@ -32,7 +32,7 @@ const getServiceName = (service: string | undefined) => {
 const getServiceIcon = (service: string | undefined) => {
     switch (service) {
         case "EmailService":
-            return <EmailOutlinedIcon sx={{color: "#4285F4"}} />
+            return <EmailOutlinedIcon sx={{color: "#D14836"}} />
         case "SMSService":
             return <SmsOutlinedIcon sx={{color: "#42A5F5"}} /> 
         case "WhatsAppService":
@@ -79,7 +79,7 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
     const creationDate = dayjs(profileData?.creationDate);
 
     return(
-        <Box display='flex' justifyContent='center' alignItems='center' ml={5} mr={3}>
+        <Box display='flex' justifyContent='center' alignItems='center' m={5}>
             <Grid container>
                 <Grid item xs={12} sm={12} md={12}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>

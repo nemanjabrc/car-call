@@ -1,20 +1,20 @@
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { TextField, InputAdornment } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../app/store/configureStore';
-import { setOwnerParams } from './ownerSlice';
+import { setOperatorParams } from './operatorSlice';
 
-const OwnerSearch = () => {
+const OperatorSearch = () => {
 
     const dispatch = useAppDispatch();
-    const {ownerParams} = useAppSelector(state => state.owner);
+    const {operatorParams} = useAppSelector(state => state.operator);
 
     return (
         <TextField 
             id="standard-basic" 
-            label="Pretraži vlasnike" 
+            label="Pretraži operatere" 
             variant="standard"
-            value={ownerParams.searchTerm || ''}
-            onChange={event => dispatch(setOwnerParams({searchTerm: event.target.value}))}
+            value={operatorParams.searchTerm || ''}
+            onChange={event => dispatch(setOperatorParams({searchTerm: event.target.value}))}
             sx={{
                 "& label.Mui-focused": { color: "#339966" },
                 "& .MuiInput-underline:after": { borderBottomColor: "#339966" },
@@ -30,4 +30,4 @@ const OwnerSearch = () => {
     )
 }
 
-export default OwnerSearch;
+export default OperatorSearch;

@@ -27,7 +27,7 @@ const OwnersList = () => {
 
     return (
         <>
-            <Box display='flex' flexDirection='column' justifyContent='space-between'>
+            <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{m: 5}}>
                 <Box display='flex' justifyContent='space-between' alignItems='center'>
                     <Typography variant="h4"  sx={{color: 'gray'}}>
                         Vlasnici

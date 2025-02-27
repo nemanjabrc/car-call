@@ -34,6 +34,7 @@ import LogOutDialog from '../../features/account/LogOutDialog';
 
 import carCallLogo from "../../assets/images/carcall-icon.png";
 
+//Opcije za korisnika u zavisnosti od toga koji je korisnik ulogovan
 interface Options {
   title: string;
   path: string;
@@ -68,18 +69,20 @@ const superAdminOptions: Options[] = [
   {title: 'Dodaj kompaniju', path:'/addcompany', icon: <AddBusinessOutlinedIcon fontSize='large' />},
   {title: 'Moj nalog', path:'/myaccount', icon: <AccountCircleOutlinedIcon fontSize='large' />},
 ]
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//Main dio gdje se renderuju sve komponente
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3),
+  padding: theme.spacing(0),
   transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${drawerWidth}px`,
+  backgroundColor: '#FFFFFF',
   variants: [
     {
       props: ({ open }) => open,
@@ -89,13 +92,16 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
           duration: theme.transitions.duration.enteringScreen,
         }),
         marginLeft: 0,
+        backgroundColor: '#FFFFFF',
       },
     },
   ],
 }));
-
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const drawerWidth = 240;
 
+
+//AppBar koji se nalazi na vrhu
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
@@ -121,15 +127,18 @@ const AppBar = styled(MuiAppBar, {
     },
   ],
 }));
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//SideBar koji se nalazi sa lijeve strane
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
+
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
 }));
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const PersistentDrawerLeft = () => {
   const theme = useTheme();

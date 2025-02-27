@@ -16,6 +16,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useParams } from "react-router-dom";
+import { updateOwner } from "../owner/ownerSlice";
 
 const registrationPlateRegex = /^([AEOJKMT][0-9][0-9]-[AEOJKMT]-[0-9][0-9][0-9]|TA-[0-9][0-9][0-9][0-9][0-9][0-9]|[0-9][0-9][0-9]-[AEOJKMT]-[0-9][0-9][0-9])$/;
 
@@ -64,6 +65,7 @@ const AddOwnersVehicleForm = () => {
         try {
             await agent.Vehicle.addOwnersVehicle(parseInt(ownerId!), data);
             dispatch(setVehicle());
+            dispatch(updateOwner());
             reset();
             setSuccessAlert(true);
         } catch (error: any) {

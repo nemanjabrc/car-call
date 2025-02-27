@@ -1,21 +1,32 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
-import { Operator } from "../../app/models/operator";
+import { Operator, OperatorParams } from "../../app/models/operator";
 import { RootState } from "../../app/store/configureStore";
 import agent from "../../app/api/agent";
 
 interface OperatorState {
     operatorLoaded: boolean;
     operatorsLoaded: boolean;
-    status: string; 
+    status: string;
+    operatorParams: OperatorParams;
 }
 
 const operatorsAdapter = createEntityAdapter<Operator>();
 
+function getAxiosParams(operatorParams: OperatorParams) {
+    const params = new URLSearchParams();
+    if(operatorParams.searchTerm) {
+        params.append('searchTerm', operatorParams.searchTerm);
+    }
+
+    return params;
+}
+
 export const fetchOperatorsAsync = createAsyncThunk<Operator[], number, {state: RootState}>(
     'operator/fetchOperatorsAsync',
     async(companyId, thunkAPI) => {
+        const params = getAxiosParams(thunkAPI.getState().operator.operatorParams);
         try {
-            const response = await agent.Account.getAllOperatorsFromCompany(companyId);
+            const response = await agent.Account.getAllOperatorsFromCompany(companyId, params);
             return response;
         } catch (error: any) {
             return thunkAPI.rejectWithValue({error: error.data}); 
@@ -41,7 +52,8 @@ export const operatorSlice = createSlice({
     initialState: operatorsAdapter.getInitialState<OperatorState>({
         operatorLoaded: false,
         operatorsLoaded: false,
-        status: 'idle'
+        status: 'idle',
+        operatorParams: {}
     }),
     reducers: {
         setOperator: (state) => {
@@ -49,6 +61,13 @@ export const operatorSlice = createSlice({
         },
         updateOperator: (state) => {
             state.operatorLoaded = false;
+        },
+        setOperatorParams: (state, action) => {
+            state.operatorsLoaded = false;
+            state.operatorParams = {...state.operatorParams, ...action.payload};
+        },
+        resetOperatorParams: (state) => {
+            state.operatorParams = {};
         }
     },
     extraReducers: (builder) => {
@@ -80,4 +99,4 @@ export const operatorSlice = createSlice({
 
 export const operatorSelectors = operatorsAdapter.getSelectors((state: RootState) => state.operator);
 
-export const {setOperator, updateOperator} = operatorSlice.actions;
+export const {setOperator, updateOperator, setOperatorParams, resetOperatorParams} = operatorSlice.actions;

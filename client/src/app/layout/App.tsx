@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '../store/configureStore'
-import NavBar from './NavBar'
+import AppProvider from './AppProvider'
 import { fetchCurrentUser } from '../../features/account/accountSlice';
 import LoadingComponent from './LoadingComponent';
 import SnackbarToast from '../../features/snackbar/SnackbarToast';
@@ -28,7 +28,7 @@ const App = () => {
   return (
     <>
       <SnackbarToast />
-      <NavBar />
+      <AppProvider />
     </>
   )
 }

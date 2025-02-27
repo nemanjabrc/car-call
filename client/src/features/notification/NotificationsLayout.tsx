@@ -51,7 +51,7 @@ const NotificationLayout = () => {
         return <LoadingComponent message="Učitavanje vozila..." />
 
     return (
-        <Box>
+        <Box sx={{m: 3}}>
             <Box display='flex' justifyContent='space-between' alignItems='center' mb={2}>
                 <Typography variant="h5" fontWeight='bold' color="grey">Podsjetnici</Typography>
                 <Box display='flex' justifyContent='start' alignItems='center' gap={1}>

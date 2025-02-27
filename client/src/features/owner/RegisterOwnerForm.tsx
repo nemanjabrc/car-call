@@ -86,7 +86,7 @@ const RegisterOwnerForm = () => {
     }
 
     return (
-        <Box component={Paper} sx={{p: 4}}>
+        <Box component={Paper} elevation={3} sx={{m: 5, p: 4}}>
             <Typography variant="h4" gutterBottom sx={{color:  'gray', mb: 4}}>
                 Podaci o vlasniku
             </Typography>
@@ -169,7 +169,7 @@ const RegisterOwnerForm = () => {
                                 <FormControlLabel {...register('notificationService')} value="EmailService" control={<Radio />} 
                                     label={
                                         <Box display='flex' justifyContent='center' alignItems='center' gap={1} sx={{color: '#666666'}}>
-                                            <EmailOutlinedIcon sx={{color: "#4285F4"}} />
+                                            <EmailOutlinedIcon sx={{color: "#D14836"}} />
                                             Email
                                         </Box>
                                     } 

@@ -51,7 +51,7 @@ const formatRegistrationMessage: any = (daysTillExpiration: number) => {
     }
     else if (daysTillExpiration > 0) {
         return <>
-                    <Typography variant="body2" color="#FFB000">Registracija ističe uskoro...</Typography>
+                    <Typography variant="caption" color="#FFB000">Registracija ističe uskoro...</Typography>
                 </>
     }
 }

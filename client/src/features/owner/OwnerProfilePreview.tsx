@@ -32,7 +32,7 @@ const getServiceName = (service: string | undefined) => {
 const getServiceIcon = (service: string | undefined) => {
     switch (service) {
         case "EmailService":
-            return <EmailOutlinedIcon sx={{color: "#4285F4"}} />
+            return <EmailOutlinedIcon sx={{color: "#D14836"}} />
         case "SMSService":
             return <SmsOutlinedIcon sx={{color: "#42A5F5"}} /> 
         case "WhatsAppService":
@@ -88,7 +88,7 @@ const OwnerProfilePreview = () => {
     const creationDate = dayjs(owner.creationDate);
 
     return (
-        <Box display='flex' justifyContent='center' alignItems='center' sx={{p: 4}}>
+        <Box display='flex' justifyContent='center' alignItems='center' sx={{m: 3, p: 4}}>
             <Grid container spacing={0}>
                 <Grid item xs={12} sm={12} md={12}>
                     <Box display='flex' justifyContent='space-between' alignItems='center'>

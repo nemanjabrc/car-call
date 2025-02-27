@@ -108,7 +108,7 @@ const VehicleDetails = () => {
     const daysTillExpiration = dateOfExpiration.diff(today, 'day');
 
     return (
-        <Box component={Paper} display='flex' justifyContent='center' alignItems='center' pt={2} pb={3}>
+        <Box component={Paper} elevation={3} sx={{m: 3, pt: 4, pb: 3}} display='flex' justifyContent='center' alignItems='center'>
             <Grid container spacing={0}>
                <Grid item xs={12} sm={12} md={12}>
                     <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' gap={1}>

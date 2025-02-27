@@ -7,3 +7,7 @@ export interface Operator {
     companyName: string
     creationDate: string
   }
+
+  export interface OperatorParams {
+    searchTerm?: string;
+  }

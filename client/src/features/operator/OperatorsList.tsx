@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { fetchOperatorsAsync, operatorSelectors } from "./operatorSlice";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import { Avatar, Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Avatar, Box, Button, Divider, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import OperatorSearch from "./OperatorSearch";
 const OperatorsList = () => {
 
     const dispatch = useAppDispatch();
@@ -19,15 +20,19 @@ const OperatorsList = () => {
             dispatch(fetchOperatorsAsync(userCompanyId!));
     }, [operatorsLoaded, dispatch, userCompanyId]);
 
-    if(!operatorsLoaded)
+    if(!operators)
         return <LoadingComponent message="Učitavanje operatera..." />
 
     return (
         <>
-            <Box display='flex' flexDirection='column' justifyContent='space-between'>
-                <Typography variant="h4" gutterBottom sx={{color: 'gray', mb: 4}}>
-                    Operateri
-                </Typography>
+            <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{m: 5}}>
+                <Box display='flex' justifyContent='space-between' alignItems='center'>
+                    <Typography variant="h4" sx={{color: 'gray'}}>
+                        Operateri
+                    </Typography>
+                    <OperatorSearch />
+                </Box>
+                <Divider sx={{mt: 1, mb: 2}} />
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 650}} aria-label="simple table">
                         <TableHead sx={{backgroundColor: '#339966'}}>

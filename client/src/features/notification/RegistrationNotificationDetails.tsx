@@ -26,7 +26,7 @@ const RegistrationNotificationDetails = () => {
     const dateOfExpiration = dayjs(notification.dateOfExpiration);
 
     return (
-        <Box display='flex' flexDirection='column'>
+        <Box display='flex' flexDirection='column' sx={{m: 3}}>
             <Box display='flex' justifyContent='start' alignItems='center' gap={2} mb={2}>
                 <Typography variant="h4" fontWeight='bold' color="#339966">
                     Podsjetnik za registraciju

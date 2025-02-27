@@ -44,7 +44,7 @@ const CompaniesList = () => {
             {!companiesLoaded ? (
                 <LoadingComponent message="Učitavanje kompanija..."/>
             ) : (
-                <>
+                <Box sx={{m: 5}}>
                     <Box display='flex' justifyContent='space-between'>
                         <Typography variant="h4" gutterBottom sx={{color: 'gray', mb: 4}}>Kompanije</Typography>
                     </Box>
@@ -119,7 +119,7 @@ const CompaniesList = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                </>
+                </Box>
             )}
         </>
     )

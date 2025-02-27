@@ -60,7 +60,7 @@ const NotificationForm = () => {
     }
 
     return (
-        <Box component={Paper} sx={{p: 4}}>
+        <Box component={Paper} elevation={3} sx={{m: 5, p: 4}}>
             <Box display='flex' justifyContent='start' alignItems='center' gap={2} mb={4}>
                 <Typography variant="h4" sx={{color: 'gray'}}>
                     Novi podsjetnik

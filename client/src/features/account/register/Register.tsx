@@ -93,7 +93,7 @@ const Register = () => {
     }
     
     return (
-        <Container component={Paper} elevation={6} maxWidth='md' sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+        <Container component={Paper} elevation={6} maxWidth='md' sx={{ mt: 3, p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <Box display='flex' justifyContent='center' alignItems='center' gap={2} mb={4} mt={2}>
                 <Typography variant="h4" color="#339966" fontWeight="bold">
                     Registruj se
@@ -216,7 +216,7 @@ const Register = () => {
                             <FormControlLabel {...register('notificationService')} value="EmailService" control={<Radio />} 
                                 label={
                                     <Box display='flex' justifyContent='center' alignItems='center' gap={1} sx={{color: '#666666'}}>
-                                        <EmailOutlinedIcon sx={{color: "#4285F4"}} />
+                                        <EmailOutlinedIcon sx={{color: "#D14836"}} />
                                         Email
                                     </Box>
                                 } 

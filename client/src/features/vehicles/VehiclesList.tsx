@@ -67,7 +67,7 @@ const VehiclesList = () => {
 
     return (
         <>
-            <Box display='flex' flexDirection='column' justifyContent='space-between'>
+            <Box display='flex' flexDirection='column' justifyContent='space-between' sx={{m: 5}}>
                 <Box display='flex' flexDirection='column'>
                     <Box display='flex' justifyContent='space-between' alignItems='center' sx={{mb: 2}}>
                         <Typography variant="h4" sx={{color: 'gray'}}>

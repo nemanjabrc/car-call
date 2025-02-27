@@ -11,7 +11,7 @@ const VehicleSerach = () => {
     return (
         <TextField 
             id="standard-basic" 
-            label="Pretražite vozila" 
+            label="Pretraži vozila" 
             variant="standard"
             value={vehicleParams.searchTerm || ''}
             onChange={event => dispatch(setVehicleParams({searchTerm: event.target.value}))}
