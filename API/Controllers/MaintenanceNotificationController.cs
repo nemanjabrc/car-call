@@ -20,6 +20,7 @@ namespace API.Controllers
 
         }
 
+        [Authorize(Roles = "Owner")]
         [HttpGet]
         [Route("getAllVehicleMaintenanceNotifications/{vehicleId}")]
         public async Task<ActionResult<List<GetMaintenanceNotificationDto>>> GetAllVehicleMaintenanceNotifications([FromRoute] int vehicleId)
@@ -34,6 +35,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Owner")]
         [HttpGet]
         [Route("getSingleVehicleMaintenanceNotification/{notificationId}")]
         public async Task<ActionResult<GetMaintenanceNotificationDto>> GetSingleVehicleMaintenanceNotification([FromRoute] int notificationId)
@@ -62,6 +64,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Owner")]
         [HttpDelete]
         [Route("deleteMaintenanceNotification/{notificationId}")]
         public async Task<ActionResult<int>> DeleteMaintenanceNotification([FromRoute] int notificationId)

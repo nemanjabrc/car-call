@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using API.DTOs.Notification;
 using API.Models;
 using API.Services.Notification;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Twilio.Rest.Chat.V1;
 
@@ -21,6 +22,7 @@ namespace API.Controllers
 
         }
 
+        [Authorize(Roles = "Owner")]
         [HttpGet]
         [Route("getRegistrationNotification/{vehicleId}")]
         public async Task<ActionResult<GetRegistrationNotificationDto>> GetRegistrationNotification([FromRoute] int vehicleId)

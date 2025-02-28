@@ -48,6 +48,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin,Operator")]
         [HttpGet("getAllVehiclesFromCompany/{companyId}")]
         public async Task<ActionResult<List<GetVehicleDto>>> GetAllVehiclesFromCompany([FromRoute] int companyId, string searchTerm, string categories)
         {
@@ -61,6 +62,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin,Operator")]
         [HttpGet("getOwnersVehicles/{ownerId}")]
         public async Task<ActionResult<List<GetVehicleDto>>> GetOwnersVehicles([FromRoute] int ownerId)
         {
@@ -116,6 +118,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin,Operator,Owner")]
         [HttpDelete("deleteVehicle/{vehicleId}")]
         public async Task<ActionResult<int>> DeleteVehicle(int vehicleId)
         {

@@ -82,7 +82,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${drawerWidth}px`,
-  backgroundColor: '#FFFFFF',
+  backgroundColor: '#F8F8F8',
   variants: [
     {
       props: ({ open }) => open,
@@ -92,7 +92,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
           duration: theme.transitions.duration.enteringScreen,
         }),
         marginLeft: 0,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#F8F8F8',
       },
     },
   ],
@@ -113,6 +113,7 @@ const AppBar = styled(MuiAppBar, {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
+  backgroundColor: '#F8F8F8',
   variants: [
     {
       props: ({ open }) => open,
@@ -123,6 +124,7 @@ const AppBar = styled(MuiAppBar, {
           easing: theme.transitions.easing.easeOut,
           duration: theme.transitions.duration.enteringScreen,
         }),
+        backgroundColor: '#F8F8F8',
       },
     },
   ],
@@ -137,6 +139,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
   ...theme.mixins.toolbar,
   justifyContent: 'flex-end',
+  backgroundColor: '#F8F8F8',
 }));
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -187,7 +190,7 @@ const PersistentDrawerLeft = () => {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{backgroundColor: 'white'}}>
-        <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+        <Toolbar sx={{display: 'flex', justifyContent: 'space-between', bgcolor: '#f8f8f8'}}>
            <Box sx={{display:'flex', alignItems:'center'}}>
             {user &&                 
               <IconButton
@@ -240,6 +243,7 @@ const PersistentDrawerLeft = () => {
             width: drawerWidth,
             boxSizing: 'border-box',
           },
+          backgroundColor: '#F8F8F8',
         }}
         variant="persistent"
         anchor="left"
@@ -276,7 +280,7 @@ const PersistentDrawerLeft = () => {
             </Box>
         </DrawerHeader>
         <Divider />
-        <List>
+        <List sx={{backgroundColor: '#f8f8f8', flexGrow: 1}}>
           {loggedUserOptions.map(({title, path, icon}) => (
               <ListItem key={title} disablePadding component={NavLink} to={path}>
                 <ListItemButton

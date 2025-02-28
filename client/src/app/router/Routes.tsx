@@ -24,38 +24,48 @@ import OwnerProfilePreview from "../../features/owner/OwnerProfilePreview";
 import VehiclesList from "../../features/vehicles/VehiclesList";
 import VehiclePreview from "../../features/vehicles/VehiclePreview";
 import AddOwnersVehicleForm from "../../features/vehicles/AddOwnersVehicleForm";
+import RequireGuest from "./RequireGuest";
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
         children: [
-            {element: <RequireAuth roles={["Admin", "Operator"]} />, children: [
-                
+            { element: <RequireGuest />, children: [
+                { path: '', element: <HomePage /> },
+                { path: 'login', element: <Login /> },
+                { path: 'register', element: <Register /> },
             ]},
-            {path:'', element: <HomePage />},
-            {path: 'myvehicles', element: <VehiclesLayout />},
-            {path: 'myvehicles/:id', element: <VehicleDetails />},
-            {path: 'vehiclenotifications/:id', element: <NotificationLayout />},
-            {path: 'vehicleregistrationnotification/:id/:vehicleId', element: <RegistrationNotificationDetails />},
-            {path: 'vehiclemaintenancenotification/:id', element: <MaintenanceNotificationDetails />},
-            {path: 'addvehicle', element: <VehicleForm />},
-            {path: 'myaccount', element: <UserAccount />},
-            {path: 'login', element: <Login />},
-            {path: 'register', element: <Register />},
-            {path: 'addcompany', element: <CompanyForm />},
-            {path: 'companies', element: <CompaniesList />},
-            {path: 'addnotification/:id', element: <NotificationForm />},
-            {path: 'addowner', element: <RegisterOwnerForm />},
-            {path: 'addoperator', element: <RegisterOperatorForm />},
-            {path: 'addadmin', element: <RegisterAdminForm />},
-            {path: 'operators', element: <OperatorsList />},
-            {path: 'operators/:id', element: <OperatorProfilePreview />},
-            {path: 'owners', element: <OwnersList />},
-            {path: 'owners/:id', element: <OwnerProfilePreview />},
-            {path: 'vehicles', element: <VehiclesList />},
-            {path: 'vehicles/:vehicleId/:ownerId', element: <VehiclePreview />},
-            {path: 'vehicles/addownersvehicle/:ownerId', element: <AddOwnersVehicleForm />},
+            {element: <RequireAuth roles={["Owner", "Operator", "Admin", "SuperAdmin"]} />, children: [
+                {path: 'myaccount', element: <UserAccount />},
+            ]},
+            {element: <RequireAuth roles={["SuperAdmin"]} />, children: [
+                {path: 'addcompany', element: <CompanyForm />},
+                {path: 'companies', element: <CompaniesList />},
+                {path: 'addadmin', element: <RegisterAdminForm />},
+            ]},
+            {element: <RequireAuth roles={["Admin"]} />, children: [
+                {path: 'addoperator', element: <RegisterOperatorForm />},
+                {path: 'operators', element: <OperatorsList />},
+                {path: 'operators/:id', element: <OperatorProfilePreview />},
+            ]},
+            {element: <RequireAuth roles={["Admin", "Operator"]} />, children: [
+                {path: 'addowner', element: <RegisterOwnerForm />},
+                {path: 'owners', element: <OwnersList />},
+                {path: 'owners/:id', element: <OwnerProfilePreview />},
+                {path: 'vehicles', element: <VehiclesList />},
+                {path: 'vehicles/:vehicleId/:ownerId', element: <VehiclePreview />},
+                {path: 'vehicles/addownersvehicle/:ownerId', element: <AddOwnersVehicleForm />},
+            ]},
+            {element: <RequireAuth roles={["Owner"]} />, children: [
+                {path: 'myvehicles', element: <VehiclesLayout />},
+                {path: 'myvehicles/:id', element: <VehicleDetails />},
+                {path: 'vehiclenotifications/:id', element: <NotificationLayout />},
+                {path: 'vehicleregistrationnotification/:id/:vehicleId', element: <RegistrationNotificationDetails />},
+                {path: 'vehiclemaintenancenotification/:id', element: <MaintenanceNotificationDetails />},
+                {path: 'addvehicle', element: <VehicleForm />},
+                {path: 'addnotification/:id', element: <NotificationForm />},
+            ]},
         ]
     }
 ])

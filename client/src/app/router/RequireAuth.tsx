@@ -10,11 +10,11 @@ const RequireAuth = ({roles}: Props) => {
     const location = useLocation();
 
     if (!user){
-        return <Navigate to={'/'} state={{from: location}}/>
+        return <Navigate to={'/'} state={{from: location}} replace/>
     }
 
     if (roles && !roles.includes(user.role)){
-        return <Navigate to='/' />
+        return <Navigate to='/' replace />
     }
 
     return <Outlet />

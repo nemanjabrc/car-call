@@ -168,6 +168,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("getAllOperatorsFromCompany/{companyId}")]
         public async Task<ActionResult<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany([FromRoute] int companyId, string searchTerm)
         {
@@ -181,6 +182,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("getOperatorProfile/{operatorId}")]
         public async Task<ActionResult<GetOperatorProfileDto>> GetOperatorProfile([FromRoute] string operatorId)
         {
@@ -194,6 +196,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("deleteOperator/{operatorId}")]
         public async Task<ActionResult> DeleteOperator([FromRoute] string operatorId)
         {
@@ -219,6 +222,7 @@ namespace API.Controllers
             return Ok(response.Data.Succeeded);
         }
 
+        [Authorize(Roles = "Admin,Operator")]
         [HttpGet("getAllOwnersFromCompany/{companyId}")]
         public async Task<ActionResult<List<GetOwnerDto>>> GetAllOwnersFromCompany([FromRoute] int companyId, string searchTerm)
         {
@@ -232,6 +236,7 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize(Roles = "Admin,Operator")]
         [HttpGet("getOwnerFromCompany/{ownerId}")]
         public async Task<ActionResult<GetOwnerDto>> GetOwnerFromCompany([FromRoute] int ownerId)
         {

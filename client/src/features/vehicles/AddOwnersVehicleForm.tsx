@@ -74,7 +74,7 @@ const AddOwnersVehicleForm = () => {
     }
 
     return (
-        <Box component={Paper} sx={{p: 4}}>
+        <Box component={Paper} elevation={3} sx={{m: 5, p: 4}}>
             <Typography variant="h4" gutterBottom sx={{color: 'gray', mb: 4}}>
                 Podaci o vozilu
             </Typography>
