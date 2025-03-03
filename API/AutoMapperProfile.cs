@@ -31,6 +31,7 @@ namespace API
             CreateMap<MaintenanceNotification, GetMaintenanceNotificationDto>();
             CreateMap<AddMaintenanceNotificationDto, MaintenanceNotification>();
             CreateMap<RegistrationNotification, GetRegistrationNotificationDto>();
+            CreateMap<RegistrationNotification, GetCompanyRegistrationNotificationDto>();
 
             CreateMap<Category, GetCategoryDto>();
             CreateMap<VehicleManufacturer, GetVehicleManufacturerDto>();

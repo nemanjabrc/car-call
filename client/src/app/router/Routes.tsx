@@ -25,6 +25,7 @@ import VehiclesList from "../../features/vehicles/VehiclesList";
 import VehiclePreview from "../../features/vehicles/VehiclePreview";
 import AddOwnersVehicleForm from "../../features/vehicles/AddOwnersVehicleForm";
 import RequireGuest from "./RequireGuest";
+import RegistrationNotificationForm from "../../features/notification/RegistrationNotificationForm";
 
 export const router = createBrowserRouter([
     {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
                 {path: 'addoperator', element: <RegisterOperatorForm />},
                 {path: 'operators', element: <OperatorsList />},
                 {path: 'operators/:id', element: <OperatorProfilePreview />},
+                {path: 'changeregistrationnotification', element: <RegistrationNotificationForm />},
             ]},
             {element: <RequireAuth roles={["Admin", "Operator"]} />, children: [
                 {path: 'addowner', element: <RegisterOwnerForm />},

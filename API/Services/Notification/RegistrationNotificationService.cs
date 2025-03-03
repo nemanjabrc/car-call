@@ -24,6 +24,54 @@ namespace API.Services.Notification
 
         }
 
+        public async Task<ServiceResponse<GetCompanyRegistrationNotificationDto>> ChangeRegistrationNotificationMessage(UpdateRegistrationNotificationDto updatedRegistrationNotification)
+        {
+            var response = new ServiceResponse<GetCompanyRegistrationNotificationDto>();
+
+            var registrationNotification = await _context.RegistrationNotifications
+                .Include(n => n.Company)
+                .FirstOrDefaultAsync(n => n.Company.Id == updatedRegistrationNotification.CompanyId);
+
+            if (registrationNotification is null)
+            {
+                response.Success = false;
+                response.Message = $"Nije pronadjena notifikacija za registraciju koja pripada kompaniji sa id: {updatedRegistrationNotification.CompanyId} u bazi";
+                return response;
+            }
+
+            registrationNotification.Message = updatedRegistrationNotification.Message;
+
+            var result = await _context.SaveChangesAsync() > 0;
+            if (result)
+            {
+                response.Data = _mapper.Map<GetCompanyRegistrationNotificationDto>(registrationNotification);
+                response.Success = true;
+            }
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<GetCompanyRegistrationNotificationDto>> GetCompanyRegistrationNotification(int companyId)
+        {
+            var response = new ServiceResponse<GetCompanyRegistrationNotificationDto>();
+
+            var registrationNotification = await _context.RegistrationNotifications
+                .Include(n => n.Company)
+                .FirstOrDefaultAsync(n => n.Company.Id == companyId);
+
+            if (registrationNotification is null)
+            {
+                response.Success = false;
+                response.Message = $"Nije pronadjena notifikacija za registraciju koja pripada kompaniji sa id: {companyId} u bazi";
+                return response;
+            }
+
+            response.Data = _mapper.Map<GetCompanyRegistrationNotificationDto>(registrationNotification);
+            response.Success = true;
+
+            return response;
+        }
+
         public async Task<ServiceResponse<GetRegistrationNotificationDto>> GetRegistrationNotification(int vehicleId)
         {
             var response = new ServiceResponse<GetRegistrationNotificationDto>();

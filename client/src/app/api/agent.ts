@@ -66,8 +66,10 @@ const Notification = {
     addNotification: (vehicleId: number, notification: any) => requests.post(`maintenanceNotification/addMaintenanceNotification/${vehicleId}`, notification),
     getAllVehicleMaintenanceNotifications: (vehicleId: number) => requests.get(`maintenanceNotification/getAllVehicleMaintenanceNotifications/${vehicleId}`),
     getSingleVehicleMaintenanceNotification: (notificationId: number) => requests.get(`maintenanceNotification/getSingleVehicleMaintenanceNotification/${notificationId}`),
-    getRegistrationNotification: (vehicleId: number) => requests.get(`RegistrationNotification/getRegistrationNotification/${vehicleId}`),
-    deleteMaintenanceNotification: (notificationId: number) => requests.delete(`MaintenanceNotification/deleteMaintenanceNotification/${notificationId}`)
+    getRegistrationNotification: (vehicleId: number) => requests.get(`registrationNotification/getRegistrationNotification/${vehicleId}`),
+    deleteMaintenanceNotification: (notificationId: number) => requests.delete(`maintenanceNotification/deleteMaintenanceNotification/${notificationId}`),
+    getCompanyRegistrationNotification: (companyId: number) => requests.get(`registrationNotification/getCompanyRegistrationNotification/${companyId}`),
+    changeRegistrationNotificationMessage: (notification: any) => requests.put(`registrationNotification/changeRegistrationNotificationMessage`, notification),
 }
 
 const agent = {

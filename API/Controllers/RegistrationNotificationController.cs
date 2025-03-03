@@ -31,7 +31,37 @@ namespace API.Controllers
 
             if (!response.Success)
             {
-                return BadRequest(response.Message);
+                return NotFound(response.Message);
+            }
+
+            return Ok(response.Data);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        [Route("changeRegistrationNotificationMessage")]
+        public async Task<ActionResult<GetCompanyRegistrationNotificationDto>> ChangeRegistrationNotificationMessage([FromBody] UpdateRegistrationNotificationDto updatedRegistrationNotification)
+        {
+            var response = await _registrationNotificationService.ChangeRegistrationNotificationMessage(updatedRegistrationNotification);
+
+            if (!response.Success)
+            {
+                return NotFound(response.Message);
+            }
+
+            return Ok(response.Data);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("getCompanyRegistrationNotification/{companyId}")]
+        public async Task<ActionResult<GetCompanyRegistrationNotificationDto>> GetCompanyRegistrationNotification([FromRoute] int companyId)
+        {
+            var response = await _registrationNotificationService.GetCompanyRegistrationNotification(companyId);
+
+            if (!response.Success)
+            {
+                return NotFound(response.Message);
             }
 
             return Ok(response.Data);

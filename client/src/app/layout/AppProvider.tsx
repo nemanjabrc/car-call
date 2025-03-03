@@ -27,6 +27,7 @@ import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import StickyNote2OutlinedIcon from '@mui/icons-material/StickyNote2Outlined';
 
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import { useAppSelector } from '../store/configureStore';
@@ -60,6 +61,7 @@ const adminOptions: Options[] = [
   {title: 'Operateri', path: '/operators', icon: <PeopleAltOutlinedIcon fontSize='large' />},
   {title: 'Dodaj vlasnika', path:'/addowner', icon: <PersonAddAltOutlinedIcon fontSize='large' />},
   {title: 'Dodaj operatera', path:'/addoperator', icon: <PersonAddAltOutlinedIcon fontSize='large' />},
+  {title: 'Izmijeni podsjetnik za registraciju', path:'/changeregistrationnotification', icon: <StickyNote2OutlinedIcon fontSize='large' />},
   {title: 'Moj nalog', path:'/myaccount', icon: <AccountCircleOutlinedIcon fontSize='large' />},
 ]
 

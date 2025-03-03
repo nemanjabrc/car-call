@@ -11,5 +11,7 @@ namespace API.Services.Notification
     {
         Task<ServiceResponse<GetRegistrationNotificationDto>> GetRegistrationNotification(int vehicleId);
         Task<ServiceResponse<int>> SetRegistrationStatusToFalse(int vehicleId);
+        Task<ServiceResponse<GetCompanyRegistrationNotificationDto>> ChangeRegistrationNotificationMessage(UpdateRegistrationNotificationDto updatedRegistrationNotification);
+        Task<ServiceResponse<GetCompanyRegistrationNotificationDto>> GetCompanyRegistrationNotification(int companyId);
     }
 }
