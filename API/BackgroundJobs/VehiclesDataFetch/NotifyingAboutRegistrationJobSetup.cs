@@ -17,7 +17,7 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                 .AddTrigger(trigger =>
                     trigger
                         .ForJob(jobKey)
-                        .WithCronSchedule("0 0 10 * * ?")
+                        .WithCronSchedule("0 12 19 * * ?")
                 );
         }
     }

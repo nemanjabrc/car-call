@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store/configureStore";
 import { hideSnackbar } from "./snackbarSlice";
 
-// interface Props {
-//     severity: "error" | "info" |"success" | "warning";
-// }
-
 const SnackbarToast = () => {
     const dispatch = useDispatch();
     const { open, message } = useSelector((state: RootState) => state.snackbar);

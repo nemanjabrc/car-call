@@ -16,6 +16,7 @@ namespace API.DTOs.Notification
         public DateTime DateOfExpiration { get; set; }
 
         //Podaci o vlasniku
+        public int OwnerId { get; set; }
         public string OwnerName { get; set; }
         public string OwnerSurname { get; set; }
         public string OwnerPhoneNumber { get; set; }

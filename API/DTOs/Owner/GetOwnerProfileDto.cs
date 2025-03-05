@@ -8,6 +8,7 @@ namespace API.DTOs.Owner
 {
     public class GetOwnerProfileDto
     {
+        public int OwnerId { get; set; }
         public string Username { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -17,5 +18,6 @@ namespace API.DTOs.Owner
         public int NumberOfVehicles { get; set; }
         public string CompanyName { get; set; }
         public DateTime CreationDate { get; set; }
+        public string[] FirebaseTokens { get; set; }
     }
 }

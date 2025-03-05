@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using API.Data;
 using API.DTOs.Notification;
 using API.DTOs.Vehicle;
+using API.Firebase;
 using API.Models;
 using API.Services.Email;
 using API.Services.Notification;
 using API.Services.Twilio;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 
@@ -21,9 +23,11 @@ namespace API.BackgroundJobs.VehiclesDataFetch
         private readonly IEmailService _emailService;
         private readonly ITwilioService _twilioService;
         private readonly IRegistrationNotificationService _registrationNotificationService;
+        private readonly IFirebaseService _firebaseService;
         public NotifyingAboutRegistrationJob(BackgroundJobsFetchContext context, IRegistrationNotificationService registrationNotificationService,
-            IEmailService emailService, ITwilioService twilioService)
+            IEmailService emailService, ITwilioService twilioService, IFirebaseService firebaseService)
         {
+            _firebaseService = firebaseService;
             _registrationNotificationService = registrationNotificationService;
             _twilioService = twilioService;
             _emailService = emailService;
@@ -42,7 +46,9 @@ namespace API.BackgroundJobs.VehiclesDataFetch
             await foreach (var vehicle in _context.Vehicles
                 .Where(v => targetDates.Contains(v.DateOfExpiration))
                 .Include(v => v.Owner)
-                .ThenInclude(o => o.Company)
+                    .ThenInclude(o => o.Company)
+                .Include(v => v.Owner)
+                    .ThenInclude(o => o.FirebaseTokens)
                 .Include(v => v.RegistrationNotification)
                 .Select(v => new
                 {
@@ -52,12 +58,14 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                     v.YearOfManufacture,
                     v.RegistrationPlate,
                     v.DateOfExpiration,
+                    OwnerId = v.Owner.Id,
                     v.Owner.Name,
                     v.Owner.Surname,
                     v.Owner.PhoneNumber,
                     v.Owner.Email,
                     v.Owner.NotificationService,
                     v.RegistrationNotification.Message,
+                    v.Owner.FirebaseTokens
                 })
                 .AsAsyncEnumerable())
             {
@@ -80,6 +88,7 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                     RegistrationPlate = vehicle.RegistrationPlate,
                     DateOfExpiration = vehicle.DateOfExpiration,
 
+                    OwnerId = vehicle.OwnerId,
                     OwnerName = vehicle.Name,
                     OwnerSurname = vehicle.Surname,
                     OwnerPhoneNumber = vehicle.PhoneNumber,
@@ -91,7 +100,7 @@ namespace API.BackgroundJobs.VehiclesDataFetch
 
                 };
 
-                //Testno logovanje samo. Obrisi na kraju.
+                //Testno logovanje samo.
                 Console.WriteLine("\nVozilo: " + registrationNotification.Manufacturer +
                     "\nModel: " + registrationNotification.Model +
                     "\nGodina: " + registrationNotification.YearOfManufacture +
@@ -106,6 +115,11 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                 if (numberOfDays == 30)
                 {
                     await _registrationNotificationService.SetRegistrationStatusToFalse(registrationNotification.Id);
+                }
+
+                foreach (var token in vehicle.FirebaseTokens)
+                {
+                    await _firebaseService.SendVehicleRegistrationPushNotification(token.Token, registrationNotification);
                 }
 
                 switch (registrationNotification.NotificationService)

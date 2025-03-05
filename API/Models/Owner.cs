@@ -17,5 +17,6 @@ namespace API.Models
         public NotificationType NotificationService { get; set; }
         public User User { get; set; }
         public List<Vehicle> Vehicles { get; set; }
+        public List<FirebaseToken> FirebaseTokens { get; set; }
     }
 }

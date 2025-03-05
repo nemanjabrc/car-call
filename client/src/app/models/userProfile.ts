@@ -8,4 +8,6 @@ export interface UserProfile {
     phoneNumber?: string;
     notificationService?: string;
     numberOfVehicles?: number;
+    ownerId?: number;
+    firebaseTokens: string[];
 }

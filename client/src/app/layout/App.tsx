@@ -4,6 +4,8 @@ import AppProvider from './AppProvider'
 import { fetchCurrentUser } from '../../features/account/accountSlice';
 import LoadingComponent from './LoadingComponent';
 import SnackbarToast from '../../features/snackbar/SnackbarToast';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/ReactToastify.css';
 
 const App = () => {
 
@@ -27,6 +29,7 @@ const App = () => {
 
   return (
     <>
+      <ToastContainer position='top-center' hideProgressBar theme='light' />
       <SnackbarToast />
       <AppProvider />
     </>

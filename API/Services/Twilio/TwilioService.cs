@@ -29,7 +29,7 @@ namespace API.Services.Twilio
             var toNumber = new PhoneNumber($"whatsapp:{maintenanceNotification.OwnerPhoneNumber}");
 
             string messageBody = $"""
-            *Podsjetnik za {maintenanceNotification.Manufacturer} {maintenanceNotification.Model} {maintenanceNotification.YearOfManufacture} ({maintenanceNotification.RegistrationPlate}) ⏰*
+            *Podsjetnik za {maintenanceNotification.Manufacturer} {maintenanceNotification.Model} ({maintenanceNotification.YearOfManufacture}) ({maintenanceNotification.RegistrationPlate}) ⏰*
 
             *Zdravo {maintenanceNotification.OwnerName} {maintenanceNotification.OwnerSurname},*
             {maintenanceNotification.NotificationMessage}
@@ -87,7 +87,7 @@ namespace API.Services.Twilio
             *Podsjetnik za registraciju ⏰*
  
             *Zdravo {registrationNotification.OwnerName} {registrationNotification.OwnerSurname},*
-            Registracija Vašeg vozila *{registrationNotification.Manufacturer} {registrationNotification.Model} {registrationNotification.YearOfManufacture} ({registrationNotification.RegistrationPlate})*
+            Registracija Vašeg vozila *{registrationNotification.Manufacturer} {registrationNotification.Model} ({registrationNotification.YearOfManufacture}) ({registrationNotification.RegistrationPlate})*
             ističe za *{registrationNotification.DaysUntilExpiration}*.
             Napominjemo Vas da je registraciju moguće obnoviti već 30 dana prije isteka važenja prethodne registracije.
             {registrationNotification.NotificationMessage} 

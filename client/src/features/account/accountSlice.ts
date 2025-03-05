@@ -120,15 +120,17 @@ export const accountSlice = createSlice({
         builder.addCase(logInUser.fulfilled, (state, action) => {
             const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
             const role = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            const userId = claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
             const companyId = claims['CompanyId'];
-            state.user = {...action.payload, role: role, companyId: companyId};
+            state.user = {...action.payload, role: role, companyId: companyId, userId: userId};
             router.navigate('/myaccount', { replace: true });
         })
         builder.addCase(fetchCurrentUser.fulfilled, (state, action) => {
             const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
             const role = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+            const userId = claims['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
             const companyId = claims['CompanyId'];
-            state.user = {...action.payload, role: role, companyId: companyId};
+            state.user = {...action.payload, role: role, companyId: companyId, userId: userId};
         });
         builder.addCase(logInUser.rejected, (_state, action) => {
             throw action.payload;

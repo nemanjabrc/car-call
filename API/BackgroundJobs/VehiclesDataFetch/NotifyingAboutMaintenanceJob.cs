@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.DTOs.Notification;
+using API.Firebase;
 using API.Models;
 using API.Services.Email;
 using API.Services.Notification;
@@ -20,9 +21,11 @@ namespace API.BackgroundJobs.VehiclesDataFetch
         private readonly IEmailService _emailService;
         private readonly ITwilioService _twilioService;
         private readonly IMaintenanceNotificationService _maintenanceNotificationService;
+        private readonly IFirebaseService _firebaseService;
         public NotifyingAboutMaintenanceJob(BackgroundJobsFetchContext context, IEmailService emailService,
-            ITwilioService twilioService, IMaintenanceNotificationService maintenanceNotificationService)
+            ITwilioService twilioService, IMaintenanceNotificationService maintenanceNotificationService, IFirebaseService firebaseService)
         {
+            _firebaseService = firebaseService;
             _maintenanceNotificationService = maintenanceNotificationService;
             _twilioService = twilioService;
             _emailService = emailService;
@@ -36,7 +39,8 @@ namespace API.BackgroundJobs.VehiclesDataFetch
             await foreach (var notification in _context.MaintenanceNotifications
                 .Where(n => n.DateOfNotification.Equals(notificationDate))
                 .Include(n => n.Vehicle)
-                .ThenInclude(v => v.Owner)
+                    .ThenInclude(v => v.Owner)
+                        .ThenInclude(o => o.FirebaseTokens)
                 .Select(n => new
                 {
                     n.Id,
@@ -52,6 +56,7 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                     n.Message,
                     n.NumberOfDays,
                     n.Repetitive,
+                    n.Vehicle.Owner.FirebaseTokens,
                 })
                 .AsAsyncEnumerable())
             {
@@ -86,6 +91,11 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                     "\nPonoviti: " + maintenanceNotification.NotificationMessage + "\n\n");
 
 
+                foreach (var token in notification.FirebaseTokens)
+                {
+                    await _firebaseService.SendVehicleMaintenancePushNotification(token.Token, maintenanceNotification);
+                }
+
                 //Za svaki case unutar switch-a postavi da se provjeri da li je notifikacija Repetitive.
                 //Ako jeste, treba da se azuriraju podaci o njoj nakon sto se poslje notifikacija.
                 //Ako nije, treba da se izbrise iz baze nakon sto se posalje notifikacija
@@ -93,7 +103,7 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                 switch (maintenanceNotification.NotificationService)
                 {
                     case (int)NotificationType.EmailService:
-                        await _emailService.SendMaintenanceNotificationEmail(maintenanceNotification, "Podsjetnik za odrzavanje");
+                        await _emailService.SendMaintenanceNotificationEmail(maintenanceNotification, "Podsjetnik za održavanje");
                         if (maintenanceNotification.Repetitive)
                         {
                             await _maintenanceNotificationService.ResetMaintenanceNotification(maintenanceNotification.Id, maintenanceNotification.NumberOfDays, notificationDate);

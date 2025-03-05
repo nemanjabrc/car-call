@@ -118,6 +118,7 @@ namespace API.Services.Account
             var owner = await _context.Owners
                 .Include(o => o.Vehicles)
                 .Include(o => o.Company)
+                .Include(o => o.FirebaseTokens)
                 .FirstOrDefaultAsync(o => o.User.Id == userId);
 
             if (owner is null)
@@ -128,9 +129,17 @@ namespace API.Services.Account
             }
 
             int numberOfVehicles = owner.Vehicles.Count;
+            string[] tokens = new string[owner.FirebaseTokens.Count];
+            int i = 0;
+            foreach (var firebaseToken in owner.FirebaseTokens)
+            {
+                tokens[i] = firebaseToken.Token;
+                i++;
+            }
 
             GetOwnerProfileDto ownerProfile = new()
             {
+                OwnerId = owner.Id,
                 Username = user.UserName,
                 Name = user.Name,
                 Surname = user.Surname,
@@ -139,7 +148,8 @@ namespace API.Services.Account
                 NotificationService = owner.NotificationService,
                 NumberOfVehicles = numberOfVehicles,
                 CompanyName = owner.Company != null ? owner.Company.Name : "",
-                CreationDate = user.CreationDate
+                CreationDate = user.CreationDate,
+                FirebaseTokens = tokens
             };
 
             response.Success = true;

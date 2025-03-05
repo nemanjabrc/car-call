@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Box, Grid, IconButton, Tooltip, Typography } from "@mui/material";
+import { Avatar, AvatarGroup, Box, Button, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import { UserProfile } from "../../app/models/userProfile";
 import dayjs from "dayjs";
@@ -10,6 +10,10 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
+import agent from "../../app/api/agent";
+import { useEffect, useState } from "react";
+import { getToken } from "firebase/messaging";
+import { messaging } from "../../../firebase-initialize";
 
 interface Props {
   profileData: UserProfile | null;
@@ -74,9 +78,58 @@ const getRoleName = (userRole: string | undefined) => {
     }
 }
 
+
 const UserProfilePreview = ({profileData, userRole}: Props) => {
 
+    const [token, setToken] = useState<string | null>(null);
+    const [showPushButton, setShowPushButton] = useState(false);
+
     const creationDate = dayjs(profileData?.creationDate);
+
+    const requestPermission = async () => {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            const fcmToken = await getToken(messaging, { vapidKey: 'BBB5S-4opQKYDsE_jkCrqARa-I_qMmqnPbPHbNl7a8pm7Gj2VWrp3kejT_8e3WKuUfNf7vo2ogi9irA_rMR9Ez0' });
+            setToken(fcmToken);
+            console.log("FCM Token:", fcmToken);
+        } else {
+            console.warn("Notification permission denied.");
+            throw new Error("Notification permission denied."); 
+        }
+    };
+
+    const checkForOwnerFirebaseTokens = async () => {
+        const fcmToken = await getToken(messaging, { vapidKey: 'BBB5S-4opQKYDsE_jkCrqARa-I_qMmqnPbPHbNl7a8pm7Gj2VWrp3kejT_8e3WKuUfNf7vo2ogi9irA_rMR9Ez0' });
+        if (profileData?.firebaseTokens) {
+            const tokenExists = profileData.firebaseTokens.includes(fcmToken);
+            setShowPushButton(!tokenExists);
+        }
+    }
+    
+    const addFirebaseToken = async (ownerId: number, token: string) => {
+        try {
+            const newToken = {
+                ownerId: ownerId,
+                token: token,
+            }
+            await agent.FirebaseToken.addFirebaseTokenToOwner(newToken);   
+            setShowPushButton(false);
+        } catch (error: any) {
+            console.log("Error:", error.message);
+        }
+    }
+
+    useEffect(() => {
+        if(token && profileData?.ownerId) {
+            addFirebaseToken(profileData?.ownerId, token);
+        }
+    }, [token])
+
+    useEffect(() => {
+        if (profileData?.firebaseTokens) {
+            checkForOwnerFirebaseTokens();
+        }
+    }, [profileData?.firebaseTokens]);
 
     return(
         <Box display='flex' justifyContent='center' alignItems='center' m={5}>
@@ -188,13 +241,20 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                                             {getServiceName(profileData?.notificationService)}
                                         </Typography>
                                     </Box>
+                                    {showPushButton && (
+                                        <Box>
+                                            <Button onClick={() => requestPermission()} variant="contained" sx={{bgcolor: '#339966'}}>
+                                                Dozvoli push notifikacije
+                                            </Button>
+                                        </Box>
+                                    )}
                                 </>
                             )}
-                        </Box>
-                        <Box position='absolute' bottom={20}>
-                            <Typography variant="body2" color="gray">
-                                Nalog kreiran {creationDate.format('DD.MM.YYYY')}.
-                            </Typography>
+                            <Box mt={3}>
+                                <Typography variant="body2" color="gray">
+                                    Nalog kreiran {creationDate.format('DD.MM.YYYY')}.
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
                 </Grid>

@@ -25,6 +25,7 @@ namespace API.Data
         public DbSet<VehicleManufacturer> VehicleManufacturers => Set<VehicleManufacturer>();
         public DbSet<VehicleModel> VehicleModels => Set<VehicleModel>();
         public DbSet<Category> Categories => Set<Category>();
+        public DbSet<FirebaseToken> FirebaseTokens => Set<FirebaseToken>();
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

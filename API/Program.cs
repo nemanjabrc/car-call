@@ -2,10 +2,12 @@ using System.Text;
 using API;
 using API.BackgroundJobs;
 using API.Data;
+using API.Firebase;
 using API.Models;
 using API.Services.Account;
 using API.Services.CompanyService;
 using API.Services.Email;
+using API.Services.FirebaseToken;
 using API.Services.Notification;
 using API.Services.Token;
 using API.Services.Twilio;
@@ -97,6 +99,8 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddSingleton<ITwilioService, TwilioService>();
 builder.Services.AddScoped<IMaintenanceNotificationService, MaintenanceNotificationService>();
 builder.Services.AddScoped<IRegistrationNotificationService, RegistrationNotificationService>();
+builder.Services.AddScoped<IFirebaseTokenService, FirebaseTokenService>();
+builder.Services.AddScoped<IFirebaseService, FirebaseService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddInfrastructure();
 
@@ -123,6 +127,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<DataContext>();

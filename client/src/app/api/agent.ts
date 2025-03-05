@@ -72,12 +72,17 @@ const Notification = {
     changeRegistrationNotificationMessage: (notification: any) => requests.put(`registrationNotification/changeRegistrationNotificationMessage`, notification),
 }
 
+const FirebaseToken = {
+    addFirebaseTokenToOwner: (values: any) => requests.post(`firebaseToken/addFirebaseTokenToOwner`, values) 
+}
+
 const agent = {
     Account,
     Company,
     LookupTables,
     Vehicle,
-    Notification
+    Notification,
+    FirebaseToken
 }
 
 export default agent;
