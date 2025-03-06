@@ -4,25 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            color: #333333;
+            background-color: #ffffff;
+            padding: 20px;
         }
 
         h1 {
             color: #000000;
+            border-left: 5px solid #339966;
+            padding-left: 10px;
         }
 
         p {
-            color: #000000;
+            color: #333333;
+            font-size: 16px;
+        }
+
+        .highlight {
+            color: #339966;
+            font-weight: 600;
+        }
+
+        .vehicle-info {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
         }
     </style>
 </head>
 
 <body>
     <h1>Zdravo {Name} {Surname},</h1>
-    <p>Registracija Vašeg vozila <b>{VehicleManufacturer} {VehicleModel} {VehicleYearOfManufacture}
-            ({VehicleRegistrationPlate})</b><br />
-        ističe za <b>{DaysUntilExpiration}</b>.</p>
+    <p>Registracija Vašeg vozila <span class="vehicle-info">{VehicleManufacturer} {VehicleModel}
+            {VehicleYearOfManufacture} ({VehicleRegistrationPlate})</span><br />
+        ističe za <b>{DaysUntilExpiration}</b> dana.</p>
     <p>Napominjemo Vas da je registraciju moguće obnoviti već 30 dana prije isteka važenja prethodne registracije.</p>
     <div>
         {Message}

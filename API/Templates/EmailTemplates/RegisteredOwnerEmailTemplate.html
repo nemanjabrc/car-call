@@ -4,28 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            color: #333333;
+            background-color: #ffffff;
+            padding: 20px;
         }
 
         h1 {
             color: #000000;
+            border-bottom: 3px solid #339966;
+            padding-bottom: 5px;
         }
 
         p {
-            color: #000000;
+            color: #333333;
+            font-size: 16px;
+        }
+
+        .credentials {
+            font-family: 'Courier New', monospace;
+            background-color: #f4f4f4;
+            padding: 5px 10px;
+            display: inline-block;
+            border-radius: 5px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #339966;
+            font-weight: 600;
+        }
+
+        .highlight {
+            color: #339966;
+            font-weight: 600;
         }
     </style>
 </head>
 
 <body>
     <h1>Zdravo {Name} {Surname},</h1>
-    <p>Registrovani ste na Car Call od strane {Company}.</p>
-    <p>Šaljemo Vam <b>privremene</b> kredencijale za Vaš nalog.</p>
-    <p>Korisničko ime: {Username}</p>
-    <p>Lozinka: {Password}</p>
+    <p>Registrovani ste na <span class="highlight">carcall</span> od strane {Company}.</p>
+    <p>Šaljemo Vam kredencijale za Vaš nalog.</p>
+    <p>Korisničko ime: <span class="credentials">{Username}</span></p>
+    <p>Lozinka: <span class="credentials">{Password}</span></p>
     <p><b>Pri prvom prijavljivanju je potrebno da promijenite lozinku.</b></p>
-    <p>Pozdrav,<br>Car Call</p>
+    <p class="footer">Pozdrav,<br><span class="highlight">carcall</span></p>
 </body>
 
 </html>
