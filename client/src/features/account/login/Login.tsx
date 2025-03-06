@@ -64,35 +64,35 @@ const Login = () => {
             <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate>
                 <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' gap={1} width={350}>
                     <TextField 
-                    margin="normal" 
-                    fullWidth 
-                    label="Korisničko ime" 
-                    autoFocus
-                    {...register('username', {required: 'Unesite korisničko ime.'})} 
-                    error={!!errors.username}
-                    helperText={errors?.username?.message as string}
-                    sx={textFieldSx}
+                        margin="normal" 
+                        fullWidth 
+                        label="Korisničko ime" 
+                        autoFocus
+                        {...register('username', {required: 'Unesite korisničko ime.'})} 
+                        error={!!errors.username}
+                        helperText={errors?.username?.message as string}
+                        sx={textFieldSx}
                     />
 
                     <TextField 
-                    margin="normal" 
-                    fullWidth 
-                    type="password"
-                    label="Lozinka"
-                    {...register('password', {required: 'Unesite lozinku.'})}
-                    error={!!errors.password}
-                    helperText={errors?.password?.message as string} 
-                    sx={textFieldSx}
+                        margin="normal" 
+                        fullWidth 
+                        type="password"
+                        label="Lozinka"
+                        {...register('password', {required: 'Unesite lozinku.'})}
+                        error={!!errors.password}
+                        helperText={errors?.password?.message as string} 
+                        sx={textFieldSx}
                     />
                 </Box>
                 <Box sx={{mb: 4, mt: 4}}>
                     <LoadingButton 
-                    type="submit" 
-                    className="submit" 
-                    variant="contained" 
-                    loading={isSubmitting}
-                    disabled={!isValid}
-                    sx={{backgroundColor: '#339966'}}
+                        type="submit" 
+                        className="submit" 
+                        variant="contained" 
+                        loading={isSubmitting}
+                        disabled={!isValid}
+                        sx={{backgroundColor: '#339966'}}
                     >
                         Prijavi se
                     </LoadingButton>

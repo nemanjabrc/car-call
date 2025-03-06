@@ -8,6 +8,7 @@ const UserAccount = () => {
     const {user, profileData} = useAppSelector(state => state.account);
     const dispatch = useAppDispatch();
     const userRole = user?.role;
+    const isPasswordTemporary = user?.isPasswordTemporary;
 
     useEffect(() => {
         switch (userRole) {
@@ -26,11 +27,11 @@ const UserAccount = () => {
             default:
               break;
           }
-    }, [dispatch]);
+    }, [dispatch, user]);
 
     return (
         <>
-          <UserProfilePreview  profileData={profileData} userRole={userRole}/>
+          <UserProfilePreview  profileData={profileData} userRole={userRole} isPasswordTemporary={isPasswordTemporary}/>
         </>
     )
 }

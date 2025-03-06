@@ -39,7 +39,7 @@ const getIcon = (category: string) => {
 const formatRegistrationMessage: any = (daysTillExpiration: number) => {
     if(daysTillExpiration === 0) {   
         return <>
-                    <Typography variant="body2" color="red">Registracija ističe danas</Typography>
+                    <Typography variant="caption" color="red">Registracija ističe danas</Typography>
                     <ErrorIcon sx={{ ml: 0.21, fontSize: 20, color: 'red' }} />
                 </>
     }

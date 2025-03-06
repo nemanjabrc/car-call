@@ -109,6 +109,9 @@ export const accountSlice = createSlice({
             const claims = JSON.parse(atob(action.payload.token.split('.')[1]));
             const role = claims['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
             state.user = {...action.payload, role: role};
+        },
+        updateUser: (state, action) => {
+            state.user = { ...state.user, ...action.payload };
         }
     },
     extraReducers: (builder => {
@@ -151,4 +154,4 @@ export const accountSlice = createSlice({
     })
 })
 
-export const {logOut, setUser} = accountSlice.actions;
+export const {logOut, setUser, updateUser} = accountSlice.actions;

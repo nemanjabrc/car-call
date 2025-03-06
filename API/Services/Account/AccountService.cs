@@ -207,11 +207,36 @@ namespace API.Services.Account
             {
                 Username = user.UserName,
                 Email = user.Email,
-                Token = await _tokenService.GenerateToken(user)
+                Token = await _tokenService.GenerateToken(user),
+                IsPasswordTemporary = user.IsPasswordTemporary
             };
 
             response.Data = loggedUser;
             response.Success = true;
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<IdentityResult>> ChangePassword(User user, string oldPassword, string newPassword)
+        {
+            var response = new ServiceResponse<IdentityResult>();
+
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+            if (!result.Succeeded)
+            {
+                response.Data = result;
+                response.Success = false;
+                response.Message = "Problem sa promjenom lozinke.";
+                return response;
+            }
+
+            user.IsPasswordTemporary = false;
+            await _userManager.UpdateAsync(user);
+
+            response.Data = result;
+            response.Success = true;
+            response.Message = "Lozinka je uspješno promijenjena.";
 
             return response;
         }

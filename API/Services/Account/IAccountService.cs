@@ -12,6 +12,7 @@ namespace API.Services.Account
     public interface IAccountService
     {
         Task<ServiceResponse<GetUserDto>> Login(LoginUserDto loginUser);
+        Task<ServiceResponse<IdentityResult>> ChangePassword(User user, string oldPassword, string newPassword);
         Task<ServiceResponse<IdentityResult>> Register(Owner owner, string username, string password);
         Task<ServiceResponse<IdentityResult>> RegisterOwner(Owner owner);
         Task<ServiceResponse<IdentityResult>> RegisterOperator(User user);

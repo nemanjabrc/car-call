@@ -23,6 +23,7 @@ const requests = {
 
 const Account = {
     login: (values: any) => requests.post('account/login', values),
+    changePassword: (values: any) => requests.put('account/changePassword', values),
     register: (values: any) => requests.post('account/register', values),
     registerOwner: (values: any) => requests.post('account/registerOwner', values),
     registerOperator: (values: any) => requests.post('account/registerOperator', values),

@@ -45,6 +45,35 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
+        [Authorize]
+        [HttpPut("changePassword")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto model)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+                return NotFound("Korisnik nije pronađen.");
+
+            var response = await _accountService.ChangePassword(user, model.OldPassword, model.NewPassword);
+
+            if (!response.Success)
+            {
+                if (response.Message.Contains("Problem sa promjenom lozinke"))
+                {
+                    foreach (var error in response.Data.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+                    return ValidationProblem();
+                }
+            }
+
+            return Ok(response.Data);
+        }
+
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterOwnerDto registerOwner)
         {

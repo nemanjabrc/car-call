@@ -10,5 +10,6 @@ namespace API.DTOs.User
         public string Username { get; set; }
         public string Email { get; set; }
         public string Token { get; set; }
+        public bool IsPasswordTemporary { get; set; }
     }
 }

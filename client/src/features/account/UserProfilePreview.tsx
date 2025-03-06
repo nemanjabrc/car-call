@@ -14,10 +14,12 @@ import agent from "../../app/api/agent";
 import { useEffect, useState } from "react";
 import { getToken } from "firebase/messaging";
 import { messaging } from "../../../firebase-initialize";
+import { Link } from "react-router-dom";
 
 interface Props {
   profileData: UserProfile | null;
   userRole: string | undefined;
+  isPasswordTemporary: boolean | undefined;
 }
 
 const getServiceName = (service: string | undefined) => {
@@ -79,7 +81,7 @@ const getRoleName = (userRole: string | undefined) => {
 }
 
 
-const UserProfilePreview = ({profileData, userRole}: Props) => {
+const UserProfilePreview = ({profileData, userRole, isPasswordTemporary}: Props) => {
 
     const [token, setToken] = useState<string | null>(null);
     const [showPushButton, setShowPushButton] = useState(false);
@@ -173,7 +175,7 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                         </Box>
                         <Box>
                             <Tooltip 
-                                title="Uredi"
+                                title="Izmijeni profil"
                                 sx={{
                                     backgroundColor: "#339966", 
                                     color: "#fff", 
@@ -257,6 +259,23 @@ const UserProfilePreview = ({profileData, userRole}: Props) => {
                             </Box>
                         </Box>
                     </Box>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={6}>
+                <Box mt={10} display="flex" flexDirection="column" alignItems="center">
+                    {isPasswordTemporary && (
+                        <Box display="flex" flexDirection="column" alignItems="center" textAlign="center">
+                            <Typography variant="caption" sx={{ color: 'gray' }}>
+                                Trenutno koristite privremenu lozinku. Iz sigurnosnih razloga savjetujemo da promijenite Vašu lozinku.
+                            </Typography>
+                            <Box mt={1}>
+                                <Link to="/changepassword" style={{ color: '#339966' }}>
+                                    Promijeni lozinku
+                                </Link>
+                            </Box>
+                        </Box>
+                    )}
+                </Box>
                 </Grid>
             </Grid>
         </Box>

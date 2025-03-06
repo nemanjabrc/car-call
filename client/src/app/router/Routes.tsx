@@ -26,6 +26,7 @@ import VehiclePreview from "../../features/vehicles/VehiclePreview";
 import AddOwnersVehicleForm from "../../features/vehicles/AddOwnersVehicleForm";
 import RequireGuest from "./RequireGuest";
 import RegistrationNotificationForm from "../../features/notification/RegistrationNotificationForm";
+import ChangePassword from "../../features/account/changePassword/ChangePassword";
 
 export const router = createBrowserRouter([
     {
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
             ]},
             {element: <RequireAuth roles={["Owner", "Operator", "Admin", "SuperAdmin"]} />, children: [
                 {path: 'myaccount', element: <UserAccount />},
+                { path: 'changepassword', element: <ChangePassword /> },
             ]},
             {element: <RequireAuth roles={["SuperAdmin"]} />, children: [
                 {path: 'addcompany', element: <CompanyForm />},
