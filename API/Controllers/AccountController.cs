@@ -251,6 +251,32 @@ namespace API.Controllers
             return Ok(response.Data.Succeeded);
         }
 
+        [Authorize(Roles = "Admin,Operator,Owner")]
+        [HttpDelete("deleteOwner/{ownerId}")]
+        public async Task<ActionResult> DeleteOwner([FromRoute] int ownerId)
+        {
+            var response = await _accountService.DeleteOwner(ownerId);
+
+            if (!response.Success)
+            {
+                if (response.Message.Contains("Greška prilikom brisanja korisničkog naloga"))
+                {
+                    foreach (var error in response.Data.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+
+                    return ValidationProblem();
+                }
+                else
+                {
+                    return BadRequest(response.Message);
+                }
+            }
+
+            return Ok(response.Data.Succeeded);
+        }
+
         [Authorize(Roles = "Admin,Operator")]
         [HttpGet("getAllOwnersFromCompany/{companyId}")]
         public async Task<ActionResult<List<GetOwnerDto>>> GetAllOwnersFromCompany([FromRoute] int companyId, string searchTerm)

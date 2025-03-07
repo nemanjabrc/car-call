@@ -41,9 +41,38 @@ namespace API.Data
                     );
             }
 
+            //Kaskadno brisanje svih MaintenanceNotification-a kada se obriše Vehicle
             builder.Entity<MaintenanceNotification>()
                 .HasOne(m => m.Vehicle)
                 .WithMany(v => v.MaintenanceNotifications)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Kaskadno brisanje svih Owner-a kada se obriše Company
+            builder.Entity<Owner>()
+                .HasOne(o => o.Company)
+                .WithMany()
+                .HasForeignKey(o => o.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Kaskadno brisanje svih User-a kada se obriše Company
+            builder.Entity<User>()
+                .HasOne(u => u.Company)
+                .WithMany()
+                .HasForeignKey(u => u.CompanyId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Kaskadno brisanje Owner -> Vehicles
+            builder.Entity<Vehicle>()
+                .HasOne(v => v.Owner)
+                .WithMany(o => o.Vehicles)
+                .HasForeignKey("OwnerId")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            //Kaskadno brisanje Owner -> FirebaseTokens
+            builder.Entity<FirebaseToken>()
+                .HasOne(f => f.Owner)
+                .WithMany(o => o.FirebaseTokens)
+                .HasForeignKey(f => f.OwnerId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Company>()

@@ -637,7 +637,7 @@ namespace API.Services.Account
             if (user == null)
             {
                 response.Success = false;
-                response.Message = $"Korisnik sa id: {operatorId} nije pronadjen.";
+                response.Message = $"Korisnik sa id: {operatorId} nije pronadjen u bazi.";
                 return response;
             }
 
@@ -661,6 +661,61 @@ namespace API.Services.Account
 
             response.Success = true;
             response.Data = result;
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<IdentityResult>> DeleteOwner(int ownerId)
+        {
+            var response = new ServiceResponse<IdentityResult>();
+
+            var owner = await _context.Owners
+                .Include(o => o.User)
+                .FirstOrDefaultAsync(o => o.Id == ownerId);
+            if (owner == null)
+            {
+                response.Success = false;
+                response.Message = $"Vlasnik sa id: {ownerId} nije pronadjen u bazi.";
+                return response;
+            }
+
+            var user = await _userManager.FindByIdAsync(owner.User.Id);
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = $"Korisnik sa id: {owner.User.Id} nije pronadjen u bazi.";
+                return response;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (!roles.Contains("Owner"))
+            {
+                response.Success = false;
+                response.Message = $"Korisnik sa id: {owner.User.Id} nema rolu operatora.";
+                return response;
+            }
+
+            _context.Owners.Remove(owner);
+            var result2 = await _context.SaveChangesAsync() > 0;
+            if (!result2)
+            {
+                response.Success = false;
+                response.Message = "Greška prilikom brisanja vlasnika.";
+                return response;
+            }
+
+            var result1 = await _userManager.DeleteAsync(user);
+            if (!result1.Succeeded)
+            {
+                response.Success = false;
+                response.Data = result1;
+                response.Message = "Greška prilikom brisanja korisničkog naloga.";
+                return response;
+            }
+
+            response.Success = true;
+            response.Data = result1;
 
             return response;
         }

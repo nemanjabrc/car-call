@@ -23,7 +23,7 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
-import AddBusinessOutlinedIcon from '@mui/icons-material/AddBusinessOutlined';
+import DomainAddOutlinedIcon from '@mui/icons-material/DomainAddOutlined';
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
@@ -68,7 +68,7 @@ const adminOptions: Options[] = [
 const superAdminOptions: Options[] = [
   {title: 'Kompanije', path: '/companies', icon: <BusinessOutlinedIcon fontSize='large' />},
   {title: 'Dodaj admina', path:'/addadmin', icon: <PersonAddAltOutlinedIcon fontSize='large' />},
-  {title: 'Dodaj kompaniju', path:'/addcompany', icon: <AddBusinessOutlinedIcon fontSize='large' />},
+  {title: 'Dodaj kompaniju', path:'/addcompany', icon: <DomainAddOutlinedIcon fontSize='large' />},
   {title: 'Moj nalog', path:'/myaccount', icon: <AccountCircleOutlinedIcon fontSize='large' />},
 ]
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

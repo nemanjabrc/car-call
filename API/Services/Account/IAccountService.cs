@@ -26,5 +26,6 @@ namespace API.Services.Account
         Task<ServiceResponse<List<GetOperatorProfileDto>>> GetAllOperatorsFromCompany(int companyId, string searchTerm);
         Task<ServiceResponse<GetOperatorProfileDto>> GetOperatorProfile(string operatorId);
         Task<ServiceResponse<IdentityResult>> DeleteOperator(string operatorId);
+        Task<ServiceResponse<IdentityResult>> DeleteOwner(int ownerId);
     }
 }
