@@ -4,8 +4,7 @@ import { fetchOwnerAsync, fetchOwnersVehiclesAsync, ownerSelectors, ownerVehicle
 import { useEffect } from "react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import dayjs from "dayjs";
-import { Box, Grid, Avatar, Typography, AvatarGroup, Tooltip, IconButton, Button } from "@mui/material";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { Box, Grid, Avatar, Typography, AvatarGroup, Tooltip, Button } from "@mui/material";
 import DirectionsCarFilledOutlinedIcon from '@mui/icons-material/DirectionsCarFilledOutlined';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'; 
 import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
@@ -15,6 +14,7 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import VehicleSlider from "../vehicles/vehicleCard/vehicleSlider/VehicleSlider";
+import DeleteOwnerDialog from "./DeleteOwnerDialog";
 
 const getServiceName = (service: string | undefined) => {
     switch (service) {
@@ -130,28 +130,7 @@ const OwnerProfilePreview = () => {
                             </Box>
                         </Box>
                         <Box>
-                            {/*Delete dialog*/}
-                            <Tooltip 
-                                title="Obriši nalog"
-                                sx={{
-                                    backgroundColor: "#339966", 
-                                    color: "#fff", 
-                                }} 
-                            >
-                                <IconButton 
-                                    size="large" 
-                                    sx={{ 
-                                        backgroundColor: "lightgray", 
-                                        color: "#fff", 
-                                        "&:hover": { 
-                                            backgroundColor: "#339966", 
-                                            color: "#fff" 
-                                        } 
-                                    }} 
-                                >
-                                    <DeleteOutlineIcon fontSize="inherit" />
-                                </IconButton>
-                            </Tooltip>
+                           <DeleteOwnerDialog ownerId={owner.id} username={owner.username} name={owner.name} surname={owner.surname} /> 
                         </Box>
                     </Box>
                 </Grid>

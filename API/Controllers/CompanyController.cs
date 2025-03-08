@@ -58,7 +58,7 @@ namespace API.Controllers
         }
 
         [HttpPut("updateCompany")]
-        public async Task<ActionResult<GetCompanyDto>> UpdateCompany(UpdateCompanyDto updatedCompany)
+        public async Task<ActionResult<GetCompanyDto>> UpdateCompany([FromBody] UpdateCompanyDto updatedCompany)
         {
             var response = await _companyService.UpdateCompany(updatedCompany);
             if (!response.Success)
@@ -69,8 +69,8 @@ namespace API.Controllers
             return Ok(response.Data);
         }
 
-        [HttpDelete("deleteCompany")]
-        public async Task<ActionResult<List<GetCompanyDto>>> DeleteCompany(int id)
+        [HttpDelete("deleteCompany/{id}")]
+        public async Task<ActionResult<List<GetCompanyDto>>> DeleteCompany([FromRoute] int id)
         {
             var response = await _companyService.DeleteCompany(id);
             if (!response.Success)

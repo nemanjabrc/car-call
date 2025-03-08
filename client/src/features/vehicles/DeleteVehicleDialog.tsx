@@ -19,7 +19,7 @@ interface Props {
     vehicleregistrationPlate: string;
 }
 
-const LogOutDialog = ({vehicleId, vehicleManufacturer, vehicleModel, vehicleregistrationPlate}: Props) => {
+const DeleteVehicleDialog = ({vehicleId, vehicleManufacturer, vehicleModel, vehicleregistrationPlate}: Props) => {
   const [open, setOpen] = React.useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -100,4 +100,4 @@ const LogOutDialog = ({vehicleId, vehicleManufacturer, vehicleModel, vehicleregi
   );
 }
 
-export default LogOutDialog;
+export default DeleteVehicleDialog;

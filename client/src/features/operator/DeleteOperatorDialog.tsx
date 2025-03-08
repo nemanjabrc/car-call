@@ -19,7 +19,7 @@ interface Props {
     surname: string;
 }
 
-const LogOutDialog = ({userId, username, name, surname}: Props) => {
+const DeleteOperatorDialog = ({userId, username, name, surname}: Props) => {
   const [open, setOpen] = React.useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const LogOutDialog = ({userId, username, name, surname}: Props) => {
         >
             <IconButton 
                 onClick={handleClickOpen}
-                size="large" 
+                size="large"
                 sx={{ 
                     backgroundColor: "lightgray", 
                     color: "#fff", 
@@ -98,4 +98,4 @@ const LogOutDialog = ({userId, username, name, surname}: Props) => {
   );
 }
 
-export default LogOutDialog;
+export default DeleteOperatorDialog;

@@ -18,7 +18,7 @@ const requests = {
     get: (url: string, params?:URLSearchParams) => axios.get(url, {params}).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body?: {}) => axios.put(url, body).then(responseBody),
-    delete: (url: string) => axios.delete(url).then(responseBody),
+    delete: (url: string) => axios.delete(url).then(responseBody)
 }
 
 const Account = {
@@ -38,18 +38,20 @@ const Account = {
     deleteOperator: (operatorId: string) => requests.delete(`account/deleteOperator/${operatorId}`),
     getAllOwnersFromCompany: (companyId: number, params: URLSearchParams) => requests.get(`account/getAllOwnersFromCompany/${companyId}`, params),
     getOwnerFromCompany: (ownerId: number) => requests.get(`account/getOwnerFromCompany/${ownerId}`),
+    deleteOwner: (ownerId: number) => requests.delete(`account/deleteOwner/${ownerId}`)
 }
 
 const Company = {
     getAll: () => requests.get('company/getAll'), 
     addCompany: (company: any) => requests.post('company/addCompany', company), 
-    updateCompany: (company: any) => requests.put('company/updateCompany', company), 
+    updateCompany: (company: any) => requests.put('company/updateCompany', company),
+    deleteCompany: (companyId: number) => requests.delete(`company/deleteCompany/${companyId}`)
 }
 
 const LookupTables = {
     getCategories: () => requests.get('lookupTables/getCategories'),
     getVehicleManufacturers: (categoryId: number) => requests.get('lookupTables/getManufacturers', new URLSearchParams({categoryId: categoryId.toString()})),
-    getVehicleModels: (manufacturerId: number) => requests.get('lookupTables/getModels', new URLSearchParams({manufacturerId: manufacturerId.toString()})),
+    getVehicleModels: (manufacturerId: number) => requests.get('lookupTables/getModels', new URLSearchParams({manufacturerId: manufacturerId.toString()}))
 }
 
 const Vehicle = {
@@ -60,7 +62,7 @@ const Vehicle = {
     renewVehicleRegistration: (vehicleId: number) => requests.put(`vehicle/renewRegistration/${vehicleId}`),
     deleteVehicle: (vehicleId: number) => requests.delete(`vehicle/deleteVehicle/${vehicleId}`),
     getAllVehiclesFromCompany: (companyId: number, params: URLSearchParams) => requests.get(`vehicle/getAllVehiclesFromCompany/${companyId}`, params),
-    getOwnersVehicles: (ownerId: number) => requests.get(`vehicle/getOwnersVehicles/${ownerId}`),
+    getOwnersVehicles: (ownerId: number) => requests.get(`vehicle/getOwnersVehicles/${ownerId}`)
 }
 
 const Notification = {
@@ -70,7 +72,7 @@ const Notification = {
     getRegistrationNotification: (vehicleId: number) => requests.get(`registrationNotification/getRegistrationNotification/${vehicleId}`),
     deleteMaintenanceNotification: (notificationId: number) => requests.delete(`maintenanceNotification/deleteMaintenanceNotification/${notificationId}`),
     getCompanyRegistrationNotification: (companyId: number) => requests.get(`registrationNotification/getCompanyRegistrationNotification/${companyId}`),
-    changeRegistrationNotificationMessage: (notification: any) => requests.put(`registrationNotification/changeRegistrationNotificationMessage`, notification),
+    changeRegistrationNotificationMessage: (notification: any) => requests.put(`registrationNotification/changeRegistrationNotificationMessage`, notification)
 }
 
 const FirebaseToken = {

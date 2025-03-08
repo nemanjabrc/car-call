@@ -3,10 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../app/store/configureStore";
 import { companySelectors, fetchCompaniesAsync } from "./companySlice";
 import { Box, Typography, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import CompanyForm from "./CompanyForm";
 import { Company } from "../../app/models/company";
+import DeleteCompanyDialog from "./DeleteCompanyDialog";
 
 const CompaniesList = () => {
 
@@ -101,18 +101,7 @@ const CompaniesList = () => {
                                                         <EditOutlinedIcon htmlColor="#339966" />
                                                     </Box>
                                             </Button>
-                                            <Button 
-                                                sx={{
-                                                '&:hover': {
-                                                    backgroundColor: '#f2f2f2',
-                                                    color: '#339966',
-                                                }
-                                                }}
-                                                >
-                                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                                                        <DeleteOutlinedIcon htmlColor="#339966" />
-                                                    </Box>
-                                            </Button>
+                                            <DeleteCompanyDialog companyId={company.id} name={company.name} city={company.city} />
                                         </TableCell>
                                     </TableRow>
                                 ))}
