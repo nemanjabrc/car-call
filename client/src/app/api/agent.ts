@@ -38,7 +38,9 @@ const Account = {
     deleteOperator: (operatorId: string) => requests.delete(`account/deleteOperator/${operatorId}`),
     getAllOwnersFromCompany: (companyId: number, params: URLSearchParams) => requests.get(`account/getAllOwnersFromCompany/${companyId}`, params),
     getOwnerFromCompany: (ownerId: number) => requests.get(`account/getOwnerFromCompany/${ownerId}`),
-    deleteOwner: (ownerId: number) => requests.delete(`account/deleteOwner/${ownerId}`)
+    deleteOwner: (ownerId: number) => requests.delete(`account/deleteOwner/${ownerId}`),
+    forgotPassword: (values: any) => requests.post('account/forgotPassword', values),
+    resetPassword: (values: any) => requests.post('account/resetPassword', values)
 }
 
 const Company = {

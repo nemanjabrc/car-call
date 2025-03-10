@@ -27,6 +27,8 @@ import AddOwnersVehicleForm from "../../features/vehicles/AddOwnersVehicleForm";
 import RequireGuest from "./RequireGuest";
 import RegistrationNotificationForm from "../../features/notification/RegistrationNotificationForm";
 import ChangePassword from "../../features/account/changePassword/ChangePassword";
+import ResetPassword from "../../features/account/resetPassword/ResetPassword";
+import ForgotPassword from "../../features/account/resetPassword/ForgotPassword";
 
 export const router = createBrowserRouter([
     {
@@ -37,6 +39,8 @@ export const router = createBrowserRouter([
                 { path: '', element: <HomePage /> },
                 { path: 'login', element: <Login /> },
                 { path: 'register', element: <Register /> },
+                { path: 'forgotpassword', element: <ForgotPassword /> },
+                { path: 'resetpassword/:email/:token', element: <ResetPassword /> },
             ]},
             {element: <RequireAuth roles={["Owner", "Operator", "Admin", "SuperAdmin"]} />, children: [
                 {path: 'myaccount', element: <UserAccount />},

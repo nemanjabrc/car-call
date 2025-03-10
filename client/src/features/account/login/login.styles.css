@@ -19,6 +19,13 @@
     line-height: 1.25rem;
     text-align: center;
 }
+
+.forgotpassword-link {
+    color: #339966;
+    font-size: 0.75rem;
+    line-height: 1.25rem;
+    text-align: center;
+}
   
 .signup-link a {
     text-decoration: underline;

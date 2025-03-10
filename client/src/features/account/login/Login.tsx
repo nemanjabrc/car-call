@@ -84,8 +84,13 @@ const Login = () => {
                         helperText={errors?.password?.message as string} 
                         sx={textFieldSx}
                     />
+                    <Box display='flex' justifyContent='start' alignItems='center'>
+                        <Link to='/forgotpassword' className="forgotpassword-link">
+                            {'Zaboravili ste lozinku?'}
+                        </Link>
+                    </Box>
                 </Box>
-                <Box sx={{mb: 4, mt: 4}}>
+                <Box sx={{mb: 3, mt: 2}}>
                     <LoadingButton 
                         type="submit" 
                         className="submit" 
@@ -98,7 +103,7 @@ const Login = () => {
                     </LoadingButton>
                 </Box>
                 <Divider />
-                <Box sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 4}}>
+                <Box display='flex' flexDirection='column' justifyContent='space-between' alignItems='center' mt={4}>
                     <Typography>Nemate nalog?</Typography>
                     <Link to='/register' className="signup-link">
                         {'Registruj se'}

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs.Owner;
 using API.DTOs.User;
+using API.DTOs.Password;
 using API.Models;
 using API.Services.Account;
 using API.Services.Token;
@@ -73,6 +74,33 @@ namespace API.Controllers
 
             return Ok(response.Data);
         }
+
+        [HttpPost("forgotPassword")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto model)
+        {
+            var response = await _accountService.ForgotPassword(model.Email);
+
+            if (!response.Success)
+            {
+                return BadRequest(new { message = response.Message });
+            }
+
+            return Ok(new { message = response.Message });
+        }
+
+        [HttpPost("resetPassword")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto model)
+        {
+            var response = await _accountService.ResetPassword(model.Email, model.Token, model.NewPassword);
+
+            if (!response.Success)
+            {
+                return BadRequest(new { message = response.Message, errors = response.Data });
+            }
+
+            return Ok(new { message = response.Message });
+        }
+
 
         [HttpPost("register")]
         public async Task<ActionResult> Register(RegisterOwnerDto registerOwner)

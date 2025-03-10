@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs.Owner;
+using API.DTOs.Password;
 using API.DTOs.User;
 using API.Models;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,8 @@ namespace API.Services.Account
     {
         Task<ServiceResponse<GetUserDto>> Login(LoginUserDto loginUser);
         Task<ServiceResponse<IdentityResult>> ChangePassword(User user, string oldPassword, string newPassword);
+        Task<ServiceResponse<string>> ForgotPassword(string email);
+        Task<ServiceResponse<string>> ResetPassword(string email, string token, string newPassword);
         Task<ServiceResponse<IdentityResult>> Register(Owner owner, string username, string password);
         Task<ServiceResponse<IdentityResult>> RegisterOwner(Owner owner);
         Task<ServiceResponse<IdentityResult>> RegisterOperator(User user);

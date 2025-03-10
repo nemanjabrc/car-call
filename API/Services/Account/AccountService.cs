@@ -241,6 +241,70 @@ namespace API.Services.Account
             return response;
         }
 
+        public async Task<ServiceResponse<string>> ForgotPassword(string email)
+        {
+            var response = new ServiceResponse<string>();
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "Korisnik sa ovom email adresom ne postoji.";
+                return response;
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var resetLink = $"http://localhost:3000/resetpassword/{email}/{Uri.EscapeDataString(token)}";
+
+            var placeholders = new Dictionary<string, string>
+            {
+                {"Name", user.Name},
+                {"Surname", user.Surname},
+                {"Username", user.UserName},
+                {"Link", resetLink},
+            };
+
+            string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplates", "ForgotPasswordEmailTemplate.html");
+            string emailBody = EmailTemplateHelper.GetEmailBody(templatePath, placeholders);
+
+            await _emailService.SendUserEmailAsync(user.Email, "Reset lozinke 🔑", emailBody);
+
+            response.Success = true;
+            response.Message = "Link za reset lozinke je poslat na email.";
+            response.Data = resetLink;
+
+            return response;
+        }
+
+        public async Task<ServiceResponse<string>> ResetPassword(string email, string token, string newPassword)
+        {
+            var response = new ServiceResponse<string>();
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "Korisnik nije pronadjen u bazi.";
+                return response;
+            }
+
+            var decodedToken = Uri.UnescapeDataString(token);
+            var result = await _userManager.ResetPasswordAsync(user, decodedToken, newPassword);
+
+            if (!result.Succeeded)
+            {
+                response.Success = false;
+                response.Message = "Resetovanje lozinke nije uspjelo.";
+                response.Data = string.Join("; ", result.Errors.Select(e => e.Description));
+                return response;
+            }
+
+            response.Success = true;
+            response.Message = "Lozinka je uspješno resetovana.";
+            return response;
+        }
+
         public async Task<ServiceResponse<IdentityResult>> Register(Owner owner, string username, string password)
         {
             var response = new ServiceResponse<IdentityResult>();
