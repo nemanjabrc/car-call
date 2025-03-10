@@ -3,7 +3,7 @@ import { Box, IconButton } from "@mui/material";
 import { Vehicle } from "../../../../app/models/vehicle";
 import KeyboardArrowLeftOutlinedIcon from '@mui/icons-material/KeyboardArrowLeftOutlined';
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
-import VehicleSliderCard from "./vehicleSliderCard";
+import VehicleSliderCard from "./VehicleSliderCard";
 
 interface Props {
     vehicles: Vehicle[];

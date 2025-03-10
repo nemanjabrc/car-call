@@ -90,10 +90,12 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                     "\nPoruka: " + maintenanceNotification.NotificationMessage +
                     "\nPonoviti: " + maintenanceNotification.NotificationMessage + "\n\n");
 
-
-                foreach (var token in notification.FirebaseTokens)
+                if (notification.FirebaseTokens.Count > 0)
                 {
-                    await _firebaseService.SendVehicleMaintenancePushNotification(token.Token, maintenanceNotification);
+                    foreach (var token in notification.FirebaseTokens)
+                    {
+                        await _firebaseService.SendVehicleMaintenancePushNotification(token.Token, maintenanceNotification);
+                    }
                 }
 
                 //Za svaki case unutar switch-a postavi da se provjeri da li je notifikacija Repetitive.
@@ -129,6 +131,7 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                             await _maintenanceNotificationService.DeleteMaintenanceNotification(maintenanceNotification.Id);
                         }
                         break;
+
                     default:
                         return;
                 }

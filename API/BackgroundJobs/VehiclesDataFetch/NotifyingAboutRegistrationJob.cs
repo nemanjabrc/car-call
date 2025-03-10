@@ -117,9 +117,12 @@ namespace API.BackgroundJobs.VehiclesDataFetch
                     await _registrationNotificationService.SetRegistrationStatusToFalse(registrationNotification.Id);
                 }
 
-                foreach (var token in vehicle.FirebaseTokens)
+                if (vehicle.FirebaseTokens.Count > 0)
                 {
-                    await _firebaseService.SendVehicleRegistrationPushNotification(token.Token, registrationNotification);
+                    foreach (var token in vehicle.FirebaseTokens)
+                    {
+                        await _firebaseService.SendVehicleRegistrationPushNotification(token.Token, registrationNotification);
+                    }
                 }
 
                 switch (registrationNotification.NotificationService)

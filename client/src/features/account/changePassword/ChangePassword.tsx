@@ -6,6 +6,7 @@ import agent from "../../../app/api/agent";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../../app/store/configureStore";
 import { updateUser } from "../accountSlice";
+import { showSnackbar } from "../../snackbar/snackbarSlice";
 
 const textFieldSx = {
     '& .MuiOutlinedInput-root': {
@@ -45,6 +46,7 @@ const ChangePassword = () => {
             await agent.Account.changePassword(data);
             dispatch(updateUser({isPasswordTemporary: false}));
             reset();
+            dispatch(showSnackbar("Uspješno ste promijenili lozinku!"));
             navigate('/myaccount');
         } catch (error: any) {
             if (error.response) {
