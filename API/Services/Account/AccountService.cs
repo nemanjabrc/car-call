@@ -396,7 +396,7 @@ namespace API.Services.Account
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplates", "RegisteredAdminEmailTemplate.html");
             string emailBody = EmailTemplateHelper.GetEmailBody(templatePath, placeholders);
 
-            await _emailService.SendUserEmailAsync(user.Email, "Dobro došli u Car Call!", emailBody);
+            await _emailService.SendUserEmailAsync(user.Email, "Dobro došli u Car Call! 🚀", emailBody);
 
             response.Data = result;
             response.Success = true;
@@ -451,7 +451,7 @@ namespace API.Services.Account
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplates", "RegisteredOperatorEmailTemplate.html");
             string emailBody = EmailTemplateHelper.GetEmailBody(templatePath, placeholders);
 
-            await _emailService.SendUserEmailAsync(user.Email, "Dobro došli u Car Call!", emailBody);
+            await _emailService.SendUserEmailAsync(user.Email, "Dobro došli u Car Call! 🚀", emailBody);
 
             response.Data = result;
             response.Success = true;
@@ -529,7 +529,7 @@ namespace API.Services.Account
             string templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Templates", "EmailTemplates", "RegisteredOwnerEmailTemplate.html");
             string emailBody = EmailTemplateHelper.GetEmailBody(templatePath, placeholders);
 
-            await _emailService.SendUserEmailAsync(owner.Email, "Dobro došli u Car Call!", emailBody);
+            await _emailService.SendUserEmailAsync(owner.Email, "Dobro došli u Car Call! 🚀", emailBody);
 
             response.Data = result;
             response.Success = true;
